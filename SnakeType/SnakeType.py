@@ -55,7 +55,7 @@ class TypingGame:
     def display_menu(self):
         self.clear_screen()
         print(f"{Colors.CYAN}{Colors.BOLD}╔══════════════════════════════════════╗")
-        print(f"║                PYTYPE                ║")
+        print(f"║              SNAKETYPE               ║")
         print(f"╚══════════════════════════════════════╝{Colors.END}")
         print(f"\n{Colors.YELLOW}Choose your test mode:{Colors.END}")
         print(f"{Colors.WHITE}1. Easy Words (3-5 letters){Colors.END}")
