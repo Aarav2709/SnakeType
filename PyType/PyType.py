@@ -55,7 +55,7 @@ class TypingGame:
     def display_menu(self):
         self.clear_screen()
         print(f"{Colors.CYAN}{Colors.BOLD}╔══════════════════════════════════════╗")
-        print(f"║          MONKEYTYPE CLONE            ║")
+        print(f"║                PYTYPE                ║")
         print(f"╚══════════════════════════════════════╝{Colors.END}")
         print(f"\n{Colors.YELLOW}Choose your test mode:{Colors.END}")
         print(f"{Colors.WHITE}1. Easy Words (3-5 letters){Colors.END}")
@@ -76,68 +76,102 @@ class TypingGame:
         print(f"╚═══════════════════════════════════════════════════════════════╝{Colors.END}")
         print()
         
-        # Display text with colored feedback
+        # Character-by-character comparison
         display_text = ""
-        words = self.current_text.split()
-        user_words = self.user_input.split()
+        typed_length = len(self.user_input)
         
-        for i, word in enumerate(words):
-            if i < len(user_words):
-                if user_words[i] == word:
-                    display_text += f"{Colors.GREEN}{word}{Colors.END} "
+        for i, char in enumerate(self.current_text):
+            if i < typed_length:
+                # Character has been typed
+                if self.user_input[i] == char:
+                    # Correct character
+                    if char == ' ':
+                        display_text += f"{Colors.GREEN}·{Colors.END}"  # Show space as dot
+                    else:
+                        display_text += f"{Colors.GREEN}{char}{Colors.END}"
                 else:
-                    display_text += f"{Colors.RED}{word}{Colors.END} "
-            elif i == len(user_words):
-                display_text += f"{Colors.YELLOW}{Colors.UNDERLINE}{word}{Colors.END} "
+                    # Incorrect character
+                    if char == ' ':
+                        display_text += f"{Colors.RED}·{Colors.END}"  # Show space as dot
+                    else:
+                        display_text += f"{Colors.RED}{char}{Colors.END}"
+            elif i == typed_length:
+                # Current character to type (cursor position)
+                if char == ' ':
+                    display_text += f"{Colors.YELLOW}{Colors.UNDERLINE}·{Colors.END}"
+                else:
+                    display_text += f"{Colors.YELLOW}{Colors.UNDERLINE}{char}{Colors.END}"
             else:
-                display_text += f"{Colors.GRAY}{word}{Colors.END} "
+                # Not yet typed
+                if char == ' ':
+                    display_text += "·"  # Show space as dot
+                else:
+                    display_text += f"{Colors.GRAY}{char}{Colors.END}"
         
-        print(f"{display_text}\n")
+        # Wrap text to fit screen better
+        wrapped_text = ""
+        line_length = 0
+        max_line_length = 80
         
-        # Show current input
-        print(f"{Colors.BLUE}Your input: {Colors.END}{self.user_input}")
+        i = 0
+        while i < len(display_text):
+            if display_text[i:i+7] == Colors:  # Color code detected
+                # Find the end of the color code
+                end_pos = display_text.find(f"{Colors.END}", i)
+                if end_pos != -1:
+                    wrapped_text += display_text[i:end_pos+len(f"{Colors.END}")]
+                    i = end_pos + len(f"{Colors.END}")
+                    line_length += 1
+                else:
+                    wrapped_text += display_text[i]
+                    i += 1
+                    line_length += 1
+            else:
+                wrapped_text += display_text[i]
+                line_length += 1
+                i += 1
+            
+            if line_length >= max_line_length and display_text[i-1:i] == " ":
+                wrapped_text += "\n"
+                line_length = 0
+        
+        print(f"{wrapped_text}\n")
         
         # Progress bar
-        progress = len(self.user_input.split()) / len(self.current_text.split())
+        progress = typed_length / len(self.current_text) if len(self.current_text) > 0 else 0
         bar_length = 50
         filled_length = int(bar_length * progress)
         bar = f"{Colors.GREEN}{'█' * filled_length}{Colors.GRAY}{'░' * (bar_length - filled_length)}{Colors.END}"
-        print(f"\nProgress: {bar} {progress*100:.1f}%")
+        print(f"Progress: {bar} {progress*100:.1f}%")
     
     def calculate_stats(self):
         if not self.start_time or not self.user_input:
             return
         
         elapsed_time = time.time() - self.start_time
+        typed_length = len(self.user_input)
         
-        # Calculate WPM
-        words_typed = len(self.user_input.split())
+        # Calculate WPM based on characters typed (standard is 5 chars = 1 word)
         if elapsed_time > 0:
-            self.current_wpm = (words_typed / elapsed_time) * 60
+            self.current_wpm = (typed_length / 5) / (elapsed_time / 60)
         
-        # Calculate accuracy
-        original_words = self.current_text.split()
-        typed_words = self.user_input.split()
-        
-        correct_words = 0
-        total_chars = 0
+        # Calculate accuracy character by character
         correct_chars = 0
+        total_chars = typed_length
+        mistakes = 0
         
-        for i, (orig, typed) in enumerate(zip(original_words, typed_words)):
-            total_chars += len(orig)
-            if orig == typed:
-                correct_words += 1
-                correct_chars += len(orig)
+        for i in range(min(typed_length, len(self.current_text))):
+            if self.user_input[i] == self.current_text[i]:
+                correct_chars += 1
             else:
-                # Count correct characters even in wrong words
-                for j, (o_char, t_char) in enumerate(zip(orig, typed)):
-                    if o_char == t_char:
-                        correct_chars += 1
+                mistakes += 1
         
         if total_chars > 0:
             self.current_accuracy = (correct_chars / total_chars) * 100
-        
-        self.mistakes = len(typed_words) - correct_words
+        else:
+            self.current_accuracy = 100
+            
+        self.mistakes = mistakes
     
     def run_test(self, word_list):
         self.current_text = " ".join(word_list)
@@ -173,7 +207,7 @@ class TypingGame:
                 self.display_text_with_progress()
                 
                 # Check if test is complete
-                if len(self.user_input.split()) >= len(self.current_text.split()):
+                if len(self.user_input) >= len(self.current_text):
                     break
         
         except KeyboardInterrupt:
