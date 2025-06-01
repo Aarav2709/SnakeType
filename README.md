@@ -2,11 +2,11 @@
 SnakeType is a fun, interactive terminal-based typing speed test game inspired by Monkeytype! Featuring real-time character feedback, multiple difficulty modes, live statistics, and a beautiful CLI interface.
 
 <!-- Badges will automatically work after PyPI publication -->
-[![PyPI Downloads](https://static.pepy.tech/badge/snaketype)](https://pepy.tech/projects/snaketype)
-[![PyPI version](https://img.shields.io/pypi/v/snaketype.svg)](https://pypi.org/project/snaketype/)
-[![Downloads](https://img.shields.io/pypi/dm/snaketype.svg)](https://pypi.org/project/snaketype/)
-[![Python Version](https://img.shields.io/pypi/pyversions/snaketype.svg)](https://pypi.org/project/snaketype/)
-[![License](https://img.shields.io/github/license/Aarav2709/snaketype)](https://github.com/yourusername/snaketype/blob/main/LICENSE)
+[![PyPI Downloads](https://static.pepy.tech/badge/SnakeType)](https://pepy.tech/projects/SnakeType)
+[![PyPI version](https://img.shields.io/pypi/v/SnakeType.svg)](https://pypi.org/project/SnakeType/)
+[![Downloads](https://img.shields.io/pypi/dm/SnakeType.svg)](https://pypi.org/project/SnakeType/)
+[![Python Version](https://img.shields.io/pypi/pyversions/SnakeType.svg)](https://pypi.org/project/SnakeType/)
+[![License](https://img.shields.io/github/license/Aarav2709/SnakeType)](https://github.com/Aarav2709/SnakeType/blob/main/LICENSE)
 
 ---
 
