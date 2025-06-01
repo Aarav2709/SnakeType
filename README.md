@@ -13,7 +13,7 @@ SnakeType is a fun, interactive terminal-based typing speed test game inspired b
 ## 🚀 Installation
 To install the game, just use pip:
 ```bash
-pip install snaketype
+pip install SnakeType
 ```
 
 ---
@@ -21,7 +21,7 @@ pip install snaketype
 ## ▶️ How to Play
 Once installed, create a new Python file (e.g., `play.py`) and add the following:
 ```python
-from snaketype import main
+from SnakeType import main
 main()
 ```
 Then run it with:
