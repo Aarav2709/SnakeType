@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SnakeType"
-version = "1.0.0"
+version = "2.0.0"
 authors = [
     { name = "Aarav Gupta", email = "tribejustice35@gmail.com" }
 ]
@@ -14,7 +14,7 @@ requires-python = ">=3.6"
 license = { text = "Apache Software License" }
 keywords = ["Typing", "Test", "Skills", "Hobbies", "Python"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3.13",
     "Intended Audience :: Education",
