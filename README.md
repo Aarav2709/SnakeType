@@ -1,7 +1,6 @@
 # 🐍 SnakeType
-SnakeType is a fun, interactive terminal-based typing speed test game inspired by Monkeytype! Featuring real-time character feedback, multiple difficulty modes, live statistics, and a beautiful CLI interface.
+SnakeType is a comprehensive, feature-rich terminal-based typing speed test game that goes beyond basic typing practice. Built with Python, it offers an engaging and gamified approach to improving your typing skills with real-time feedback, adaptive difficulty, achievement systems, and detailed performance analytics.
 
-<!-- Badges will automatically work after PyPI publication -->
 [![PyPI Downloads](https://static.pepy.tech/badge/SnakeType)](https://pepy.tech/projects/SnakeType)
 [![PyPI version](https://img.shields.io/pypi/v/SnakeType.svg)](https://pypi.org/project/SnakeType/)
 [![Downloads](https://img.shields.io/pypi/dm/SnakeType.svg)](https://pypi.org/project/SnakeType/)
@@ -29,41 +28,61 @@ Then run it with:
 python play.py
 ```
 
----
+## ✨ Core Features
+- **Real-time Character-by-Character Feedback** with instant visual indicators
+- **Adaptive Difficulty System** that adjusts to your skill level automatically
+- **Multiple Test Modes**: Easy, Medium, Hard, Common Words, and Custom Text
+- **Advanced Performance Tracking** with SQLite database storage
+- **Achievement System** with 12+ unlockable achievements
+- **Live Statistics**: Real-time WPM, accuracy, consistency scoring
+- **Error Pattern Analysis** to identify and improve weak areas
+- **Typing Lessons** for skill development (Home Row, Number Row, etc.)
+- **Daily Streaks & Goals** for motivation and habit building
+- **Export/Import Statistics** for data portability
 
-## 🎮 Features
-- ✅ Real-time Character-by-Character Feedback
-- 🎯 Multiple Difficulty Modes: Easy, Medium, Hard, Common Words
-- 📊 Live WPM & Accuracy Statistics
-- 🏆 Historical Performance Tracking
-- 🎨 Beautiful Colorful CLI Interface
-- ⚡ Instant Visual Feedback (Green=Correct, Red=Incorrect)
-- 📈 Progress Bar & Performance Analytics
-- 🔤 Custom Test Length Options (10-100 words)
+### 🎮 Game Modes
+1. **Difficulty Levels**: Easy (3-5 letter words), Medium (6-8 letters), Hard (10+ letters)
+2. **Common Words Mode**: Practice with the most frequently used English words
+3. **Adaptive Mode**: AI-powered difficulty adjustment based on performance
+4. **Custom Text Import**: Load your own text files for practice
+5. **Typing Lessons**: Structured lessons for finger training and skill building
+6. **Custom Length Tests**: Choose anywhere from 10-200 words
 
----
+### 📊 Advanced Analytics
+- **Performance Trends**: Track improvement over time with regression analysis
+- **Error Analysis**: Detailed breakdown of common mistakes and patterns
+- **Consistency Scoring**: Measure typing rhythm and stability
+- **Finger-specific Error Tracking**: Identify which fingers need more practice
+- **30-day Performance Reports**: Comprehensive statistics and insights
+- **Keystroke Timing Analysis**: Real-time rhythm detection
 
-## 📊 Performance Tracking & Statistics
-Track your typing progress with detailed metrics:
-- Real-time WPM (Words Per Minute) calculation
-- Character-level accuracy percentage
-- Mistake counting and error tracking
-- Historical data for last 10 tests
-- Performance trends and improvement insights
+### 🏆 Achievement System
+Unlock achievements for various milestones:
+- **Speed Achievements**: Speed Demon (80+ WPM), Speed Machine (100+ WPM)
+- **Accuracy Rewards**: Accuracy Master (98%+), Perfectionist (100%)
+- **Persistence Badges**: Marathon typing, Daily streaks, Test completion milestones
+- **Time-based Rewards**: Early Bird, Night Owl, Weekend Warrior
+- **Progress Tracking**: Improvement-based achievements
 
----
+### ⚙️ Customization Options
+- **Auto-difficulty Toggle**: Enable/disable adaptive difficulty
+- **Text Wrap Width**: Adjust display formatting (40-120 characters)
+- **Daily Goals**: Set personal targets (1-20 tests per day)
+- **Live WPM Display**: Toggle real-time speed updates
+- **Statistics Export**: Backup your progress data
 
-## 🧠 How the Game Works
-- Choose your difficulty level or custom word count
-- Start typing and see real-time feedback:
-  - 🟢 **Green characters** = Correctly typed
-  - 🔴 **Red characters** = Incorrectly typed
-  - 🟡 **Yellow underlined** = Current position
-  - ⚪ **Gray characters** = Not yet typed
-- Complete the test and view detailed results
-- Track your improvement over time!
+### 🎯 Key Technical Features
+- **SQLite Database**: Persistent storage for all statistics and progress
+- **Multi-threaded Performance**: Real-time updates without lag
+- **Cross-platform Compatibility**: Works on Windows, macOS, and Linux
+- **Enhanced Color Display**: Rich terminal UI with ANSI color support
+- **Error Pattern Recognition**: Machine learning-inspired error analysis
+- **Performance Optimization**: Efficient handling of large datasets
 
----
+### 📈 Progress Tracking
+- **Real-time Metrics**: Live WPM, accuracy percentage, mistake counting
+- **Historical Data**: Store and analyze last 10 test results with trends
+- **Streak Monitoring**: Track daily practice consistency
+- **Performance Visualization**: Text-based charts and progress indicators
+- **Comparative Analysis**: Week-over-week and month-over-month improvements
 
-## 💡 Tip
-Focus on accuracy first - speed will naturally follow! The game provides instant feedback to help you identify and correct mistakes as you type.
