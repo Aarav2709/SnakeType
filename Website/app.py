@@ -547,6 +547,22 @@ def health_check():
         'vercel': bool(os.getenv('VERCEL'))
     })
 
+# Explicit static file serving for Vercel
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    from flask import send_from_directory
+    import mimetypes
+    static_dir = os.path.join(os.path.dirname(__file__), 'static')
+    response = send_from_directory(static_dir, filename)
+    
+    # Ensure proper MIME types
+    if filename.endswith('.css'):
+        response.headers['Content-Type'] = 'text/css'
+    elif filename.endswith('.js'):
+        response.headers['Content-Type'] = 'application/javascript'
+    
+    return response
+
 @app.route('/')
 def index():
     try:
