@@ -198,6 +198,8 @@ class DatabaseManager:
     def init_database(self):
         """Initialize database with improved error handling"""
         try:
+            os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+            
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 
@@ -494,20 +496,78 @@ class DatabaseManager:
             print(f"Error getting performance trends: {e}")
             return []
 
-db = DatabaseManager()
+# Database instance - initialize lazily
+db = None
+
+def get_db():
+    """Get database instance, initializing if needed"""
+    global db
+    if db is None:
+        try:
+            db = DatabaseManager()
+        except Exception as e:
+            print(f"Database initialization error: {e}")
+            # Return a mock database for error cases
+            return MockDatabase()
+    return db
+
+class MockDatabase:
+    """Mock database for error cases"""
+    def get_best_stats(self):
+        return None
+    def get_recent_stats(self, limit):
+        return []
+    def get_achievements(self):
+        return []
+    def get_streak_count(self):
+        return 0
+    def save_test_result(self, *args, **kwargs):
+        return None
+    def get_statistics(self, days=30):
+        return []
+    def get_error_analysis(self, days=30):
+        return []
+    def get_performance_trends(self, days=30):
+        return []
+    def unlock_achievement(self, achievement_id):
+        return False
+    def save_error_patterns(self, test_id, patterns):
+        return None
+    def get_user_setting(self, key, default=None):
+        return default
+    def set_user_setting(self, key, value):
+        return None
+
+# Health check endpoint
+@app.route('/health')
+def health_check():
+    return jsonify({
+        'status': 'healthy',
+        'message': 'SnakeType API is running',
+        'vercel': bool(os.getenv('VERCEL'))
+    })
 
 @app.route('/')
 def index():
-    best_stats = db.get_best_stats()
-    recent_stats = db.get_recent_stats(5)
-    achievements = db.get_achievements()
-    streak = db.get_streak_count()
-    
-    return render_template('index.html', 
-                         best_stats=best_stats,
-                         recent_stats=recent_stats,
-                         achievements=achievements,
-                         streak=streak)
+    try:
+        database = get_db()
+        best_stats = database.get_best_stats()
+        recent_stats = database.get_recent_stats(5)
+        achievements = database.get_achievements()
+        streak = database.get_streak_count()
+        
+        return render_template('index.html', 
+                             best_stats=best_stats,
+                             recent_stats=recent_stats,
+                             achievements=achievements,
+                             streak=streak)
+    except Exception as e:
+        print(f"Error in index route: {e}")
+        return render_template('index.html', 
+                             best_stats=None,
+                             recent_stats=[],
+                             achievements=[],
+                             streak=0)
 
 @app.route('/test')
 def test():
@@ -519,10 +579,11 @@ def lessons():
 
 @app.route('/achievements')
 def achievements():
-    user_achievements = db.get_achievements()
+    database = get_db()
+    user_achievements = database.get_achievements()
     unlocked_ids = {ach[0] for ach in user_achievements}
     
-    stats = db.get_statistics(days=30)
+    stats = database.get_statistics(days=30)
     progress = {}
     
     if stats:
@@ -544,16 +605,25 @@ def achievements():
 
 @app.route('/stats')
 def stats():
-    recent_stats = db.get_recent_stats(20)
-    best_stats = db.get_best_stats()
-    error_analysis = db.get_error_analysis(30)
-    trends = db.get_performance_trends(30)
-    
-    return render_template('stats.html', 
-                         recent_stats=recent_stats, 
-                         best_stats=best_stats,
-                         error_analysis=error_analysis,
-                         trends=trends)
+    try:
+        database = get_db()
+        recent_stats = database.get_recent_stats(20)
+        best_stats = database.get_best_stats()
+        error_analysis = database.get_error_analysis(30)
+        trends = database.get_performance_trends(30)
+        
+        return render_template('stats.html', 
+                             recent_stats=recent_stats, 
+                             best_stats=best_stats,
+                             error_analysis=error_analysis,
+                             trends=trends)
+    except Exception as e:
+        print(f"Error in stats route: {e}")
+        return render_template('stats.html', 
+                             recent_stats=[], 
+                             best_stats={},
+                             error_analysis={},
+                             trends={})
 
 @app.route('/api/get_words')
 def get_words():
@@ -618,55 +688,56 @@ def save_result():
     test_mode = data.get('test_mode', 'standard')
     error_patterns = data.get('error_patterns', [])
     
-    test_id = db.save_test_result(wpm, accuracy, duration, words_typed, errors, 
+    database = get_db()
+    test_id = database.save_test_result(wpm, accuracy, duration, words_typed, errors, 
                                 difficulty, chars_typed, correct_chars, raw_wpm, 
                                 consistency, test_mode)
     
     if test_id and error_patterns:
-        db.save_error_patterns(test_id, error_patterns)
+        database.save_error_patterns(test_id, error_patterns)
     
     achievements_unlocked = []
-    stats = db.get_statistics(days=30)
+    stats = database.get_statistics(days=30)
     
-    if wpm >= 80 and db.unlock_achievement('speed_demon'):
+    if wpm >= 80 and database.unlock_achievement('speed_demon'):
         achievements_unlocked.append('speed_demon')
-    if wpm >= 100 and db.unlock_achievement('speed_machine'):
+    if wpm >= 100 and database.unlock_achievement('speed_machine'):
         achievements_unlocked.append('speed_machine')
     
-    if accuracy >= 98 and db.unlock_achievement('accuracy_master'):
+    if accuracy >= 98 and database.unlock_achievement('accuracy_master'):
         achievements_unlocked.append('accuracy_master')
-    if accuracy == 100 and db.unlock_achievement('perfectionist'):
+    if accuracy == 100 and database.unlock_achievement('perfectionist'):
         achievements_unlocked.append('perfectionist')
     
-    if duration >= 300 and db.unlock_achievement('marathon'):  # 5 minutes
+    if duration >= 300 and database.unlock_achievement('marathon'):  # 5 minutes
         achievements_unlocked.append('marathon')
     
-    if len(stats) >= 10 and db.unlock_achievement('persistent'):
+    if len(stats) >= 10 and database.unlock_achievement('persistent'):
         achievements_unlocked.append('persistent')
     
     from datetime import datetime
     current_hour = datetime.now().hour
-    if current_hour < 8 and db.unlock_achievement('early_bird'):
+    if current_hour < 8 and database.unlock_achievement('early_bird'):
         achievements_unlocked.append('early_bird')
-    if current_hour >= 22 and db.unlock_achievement('night_owl'):
+    if current_hour >= 22 and database.unlock_achievement('night_owl'):
         achievements_unlocked.append('night_owl')
     
-    if datetime.now().weekday() >= 5 and db.unlock_achievement('weekend_warrior'):
+    if datetime.now().weekday() >= 5 and database.unlock_achievement('weekend_warrior'):
         achievements_unlocked.append('weekend_warrior')
     
-    streak = db.get_streak_count()
-    if streak >= 7 and db.unlock_achievement('streak_master'):
+    streak = database.get_streak_count()
+    if streak >= 7 and database.unlock_achievement('streak_master'):
         achievements_unlocked.append('streak_master')
     
     if len(stats) >= 5:
         recent_accuracy = [stat[3] for stat in stats[:5]]
-        if all(acc > 90 for acc in recent_accuracy) and db.unlock_achievement('consistent'):
+        if all(acc > 90 for acc in recent_accuracy) and database.unlock_achievement('consistent'):
             achievements_unlocked.append('consistent')
     
     if len(stats) >= 10:
         recent_wpm = [stat[2] for stat in stats[:5]]
         older_wpm = [stat[2] for stat in stats[5:10]]
-        if sum(recent_wpm)/5 - sum(older_wpm)/5 >= 20 and db.unlock_achievement('improver'):
+        if sum(recent_wpm)/5 - sum(older_wpm)/5 >= 20 and database.unlock_achievement('improver'):
             achievements_unlocked.append('improver')
     
     return jsonify({
@@ -677,10 +748,11 @@ def save_result():
 
 @app.route('/api/stats')
 def get_stats():
-    recent_stats = db.get_recent_stats(20)
-    best_stats = db.get_best_stats()
-    error_analysis = db.get_error_analysis(30)
-    trends = db.get_performance_trends(30)
+    database = get_db()
+    recent_stats = database.get_recent_stats(20)
+    best_stats = database.get_best_stats()
+    error_analysis = database.get_error_analysis(30)
+    trends = database.get_performance_trends(30)
     
     return jsonify({
         'recent_stats': recent_stats,
@@ -691,7 +763,8 @@ def get_stats():
 
 @app.route('/api/achievements')
 def get_achievements():
-    user_achievements = db.get_achievements()
+    database = get_db()
+    user_achievements = database.get_achievements()
     return jsonify({
         'achievements': user_achievements,
         'all_achievements': ACHIEVEMENTS
@@ -755,7 +828,8 @@ def upload_text():
 @app.route('/api/performance_insights')
 def get_performance_insights():
     """Get advanced performance insights"""
-    stats = db.get_statistics(days=30)
+    database = get_db()
+    stats = database.get_statistics(days=30)
     if not stats:
         return jsonify({'insights': [], 'recommendations': []})
     
@@ -825,7 +899,3 @@ def handle_typing_update(data):
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=5001)
-
-# For Vercel
-def handler(request):
-    return app(request.environ, request.start_response)
