@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Typing Test - SnakeType{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="test-container">
+    <div class="test-header">
+        <h1>Typing Test</h1>
+        <p>Click in the test area below and start typing to begin.</p>
+    </div>
+
+    <div class="difficulty-selector">
+        <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+        <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-value" id="wpm-display">0</div>
+            <div class="stat-label">WPM</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="accuracy-display">100%</div>
+            <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="time-display">60</div>
+            <div class="stat-label">Time Left</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="errors-display">0</div>
+            <div class="stat-label">Errors</div>
+        </div>
+    </div>
+
+    <div class="test-area" id="test-area">
+        <div class="words-container" id="words-container">
+            <div class="words-display" id="words-display">
+                Click here to start typing.
+            </div>
+        </div>
+        <input type="text" class="typing-input" id="typing-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+
+    <div class="test-controls">
+        <button class="btn" id="restart-btn">Restart Test</button>
+        <button class="btn btn-secondary" id="pause-btn">Pause</button>
+    </div>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-content">
+        <h2>Test Complete!</h2>
+        <div class="results-stats">
+            <div class="result-stat">
+                <div class="result-stat-value" id="final-wpm">0</div>
+                <div class="result-stat-label">WPM</div>
+            </div>
+            <div class="result-stat">
+                <div class="result-stat-value" id="final-accuracy">0%</div>
+                <div class="result-stat-label">Accuracy</div>
+            </div>
+            <div class="result-stat">
+                <div class="result-stat-value" id="final-time">0s</div>
+                <div class="result-stat-label">Time</div>
+            </div>
+            <div class="result-stat">
+                <div class="result-stat-value" id="final-errors">0</div>
+                <div class="result-stat-label">Errors</div>
+            </div>
+        </div>
+        <div class="achievements-unlocked" id="achievements-unlocked" style="display: none;">
+            <h3>Achievements Unlocked!</h3>
+            <div id="achievement-list"></div>
+        </div>
+        <div style="margin-top: 2rem;">
+            <button class="btn" id="test-again-btn">Test Again</button>
+            <button class="btn btn-secondary" id="view-stats-btn">View Stats</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/typing-test-centered.js') }}"></script>
+{% endblock %}

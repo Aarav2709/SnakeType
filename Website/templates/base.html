@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SnakeType{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav style="display: flex; justify-content: center; align-items: center;">
+                <ul class="nav-links" style="display: flex; gap: 0; list-style: none; margin: 0; padding: 0; align-items: center;">
+                    <li><a href="/" style="text-decoration: none; color: #ffffff; padding: 0.5rem 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#ffffff'">Home</a></li>
+                    <li style="height: 20px; width: 1px; background-color: rgba(255, 255, 255, 0.3); margin: 0 0.5rem;"></li>
+                    <li><a href="/test" style="text-decoration: none; color: #ffffff; padding: 0.5rem 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#ffffff'">Test</a></li>
+                    <li style="height: 20px; width: 1px; background-color: rgba(255, 255, 255, 0.3); margin: 0 0.5rem;"></li>
+                    <li><a href="/lessons" style="text-decoration: none; color: #ffffff; padding: 0.5rem 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#ffffff'">Lessons</a></li>
+                    <li style="height: 20px; width: 1px; background-color: rgba(255, 255, 255, 0.3); margin: 0 0.5rem;"></li>
+                    <li><a href="/stats" style="text-decoration: none; color: #ffffff; padding: 0.5rem 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#ffffff'">Stats</a></li>
+                    <li style="height: 20px; width: 1px; background-color: rgba(255, 255, 255, 0.3); margin: 0 0.5rem;"></li>
+                    <li><a href="/achievements" style="text-decoration: none; color: #ffffff; padding: 0.5rem 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#ffffff'">Achievements</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SnakeType. A modern typing test experience.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

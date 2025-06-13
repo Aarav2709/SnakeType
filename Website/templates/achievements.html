@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements - SnakeType{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/achievements.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="achievements-container">
+    <div class="achievements-header">
+        <h1>🏆 Achievements</h1>
+        <div class="progress-overview">
+            <div class="progress-stat">
+                <span class="number">{{ unlocked|length }}</span>
+                <span class="label">Unlocked</span>
+            </div>
+            <div class="progress-divider">/</div>
+            <div class="progress-stat">
+                <span class="number">{{ achievements|length }}</span>
+                <span class="label">Total</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="achievement-sections">
+        <div class="achievement-section">
+            <h2>🚀 Speed Achievements</h2>
+            <div class="achievements-grid">
+                {% for ach_id in ['speed_demon', 'speed_machine'] %}
+                    {% if ach_id in achievements %}
+                        {% set ach = achievements[ach_id] %}
+                        <div class="achievement-card {{ 'unlocked' if ach_id in unlocked else 'locked' }}">
+                            <div class="achievement-icon">{{ ach.icon }}</div>
+                            <div class="achievement-content">
+                                <h3>{{ ach.name }}</h3>
+                                <p>{{ ach.desc }}</p>
+                                {% if ach_id not in unlocked and ach_id in progress %}
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ progress[ach_id] }}%"></div>
+                                    </div>
+                                    <span class="progress-text">{{ "%.0f"|format(progress[ach_id]) }}%</span>
+                                {% elif ach_id in unlocked %}
+                                    <div class="achievement-unlocked">✓ Unlocked</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="achievement-section">
+            <h2>🎯 Accuracy Achievements</h2>
+            <div class="achievements-grid">
+                {% for ach_id in ['accuracy_master', 'perfectionist'] %}
+                    {% if ach_id in achievements %}
+                        {% set ach = achievements[ach_id] %}
+                        <div class="achievement-card {{ 'unlocked' if ach_id in unlocked else 'locked' }}">
+                            <div class="achievement-icon">{{ ach.icon }}</div>
+                            <div class="achievement-content">
+                                <h3>{{ ach.name }}</h3>
+                                <p>{{ ach.desc }}</p>
+                                {% if ach_id not in unlocked and ach_id in progress %}
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ progress[ach_id] }}%"></div>
+                                    </div>
+                                    <span class="progress-text">{{ "%.0f"|format(progress[ach_id]) }}%</span>
+                                {% elif ach_id in unlocked %}
+                                    <div class="achievement-unlocked">✓ Unlocked</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="achievement-section">
+            <h2>🔥 Persistence Achievements</h2>
+            <div class="achievements-grid">
+                {% for ach_id in ['persistent', 'marathon', 'consistent', 'streak_master'] %}
+                    {% if ach_id in achievements %}
+                        {% set ach = achievements[ach_id] %}
+                        <div class="achievement-card {{ 'unlocked' if ach_id in unlocked else 'locked' }}">
+                            <div class="achievement-icon">{{ ach.icon }}</div>
+                            <div class="achievement-content">
+                                <h3>{{ ach.name }}</h3>
+                                <p>{{ ach.desc }}</p>
+                                {% if ach_id not in unlocked and ach_id in progress %}
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ progress[ach_id] }}%"></div>
+                                    </div>
+                                    <span class="progress-text">{{ "%.0f"|format(progress[ach_id]) }}%</span>
+                                {% elif ach_id in unlocked %}
+                                    <div class="achievement-unlocked">✓ Unlocked</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="achievement-section">
+            <h2>⏰ Time-based Achievements</h2>
+            <div class="achievements-grid">
+                {% for ach_id in ['early_bird', 'night_owl', 'weekend_warrior'] %}
+                    {% if ach_id in achievements %}
+                        {% set ach = achievements[ach_id] %}
+                        <div class="achievement-card {{ 'unlocked' if ach_id in unlocked else 'locked' }}">
+                            <div class="achievement-icon">{{ ach.icon }}</div>
+                            <div class="achievement-content">
+                                <h3>{{ ach.name }}</h3>
+                                <p>{{ ach.desc }}</p>
+                                {% if ach_id in unlocked %}
+                                    <div class="achievement-unlocked">✓ Unlocked</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="achievement-section">
+            <h2>📊 Progress Achievements</h2>
+            <div class="achievements-grid">
+                {% for ach_id in ['improver'] %}
+                    {% if ach_id in achievements %}
+                        {% set ach = achievements[ach_id] %}
+                        <div class="achievement-card {{ 'unlocked' if ach_id in unlocked else 'locked' }}">
+                            <div class="achievement-icon">{{ ach.icon }}</div>
+                            <div class="achievement-content">
+                                <h3>{{ ach.name }}</h3>
+                                <p>{{ ach.desc }}</p>
+                                {% if ach_id in unlocked %}
+                                    <div class="achievement-unlocked">✓ Unlocked</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="achievement-tips">
+        <h2>💡 How to Unlock Achievements</h2>
+        <div class="tips-container">
+            <div class="tip">
+                <strong>Speed Achievements:</strong> Focus on maintaining consistent rhythm and proper finger placement.
+            </div>
+            <div class="tip">
+                <strong>Accuracy Achievements:</strong> Slow down and concentrate on hitting the right keys.
+            </div>
+            <div class="tip">
+                <strong>Persistence Achievements:</strong> Practice regularly and set daily goals.
+            </div>
+            <div class="tip">
+                <strong>Time-based Achievements:</strong> Test at different times of day for variety.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/achievements.js') }}"></script>
+{% endblock %}

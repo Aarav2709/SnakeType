@@ -1,0 +1,253 @@
+
+.stats-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+}
+
+.stats-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.stats-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: #111111;
+    border: 1px solid #333333;
+    padding: 2rem;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: #ffffff;
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #cccccc;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.chart-section {
+    background: #111111;
+    border: 1px solid #333333;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.chart-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-bottom: 1rem;
+}
+
+.recent-tests {
+    background: #111111;
+    border: 1px solid #333333;
+    padding: 2rem;
+}
+
+.recent-tests h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.test-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.test-table th,
+.test-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #333333;
+}
+
+.test-table th {
+    color: #ffffff;
+    font-weight: 600;
+    border-bottom: 2px solid #ffffff;
+}
+
+.test-table td {
+    color: #cccccc;
+}
+
+.test-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.difficulty-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    border: 1px solid #333333;
+    color: #cccccc;
+}
+
+.difficulty-easy {
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.difficulty-medium {
+    border-color: #FF9800;
+    color: #FF9800;
+}
+
+.difficulty-hard {
+    border-color: #F44336;
+    color: #F44336;
+}
+
+.achievements-section {
+    background: #111111;
+    border: 1px solid #333333;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.achievements-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.achievement-card {
+    background: #000000;
+    border: 1px solid #333333;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.achievement-card.unlocked {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    transform: scale(1.02);
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.achievement-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.achievement-desc {
+    font-size: 0.8rem;
+    color: #cccccc;
+}
+
+.no-data {
+    text-align: center;
+    color: #cccccc;
+    padding: 3rem;
+    font-style: italic;
+}
+
+.export-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #333333;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    border-color: #ffffff;
+    background: #ffffff;
+    color: #000000;
+}
+
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: #cccccc;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #333333;
+    border-top: 4px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .stats-overview {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .test-table {
+        font-size: 0.8rem;
+    }
+
+    .test-table th,
+    .test-table td {
+        padding: 0.5rem;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+}

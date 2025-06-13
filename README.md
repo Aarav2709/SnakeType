@@ -10,15 +10,44 @@ SnakeType is a comprehensive, feature-rich terminal-based typing speed test game
 ---
 
 ## 🚀 Installation
-To install the game, just use pip:
+
+### 📦 Terminal Version (PyPI Package)
+To install the terminal-based game, just use pip:
 ```bash
 pip install SnakeType
 ```
 
+### 🌐 Web Application
+To run the web version locally or deploy it:
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/Aarav2709/SnakeType.git
+cd SnakeType
+```
+
+2. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+3. **Run locally:**
+```bash
+cd Website
+python app.py
+```
+Then open http://localhost:5001 in your browser.
+
+4. **Deploy to Vercel (Optional):**
+   - Connect your GitHub repository to Vercel
+   - Vercel will automatically deploy using the included `vercel.json` configuration
+
 ---
 
 ## ▶️ How to Play
-Once installed, create a new Python file (e.g., `play.py`) and add the following:
+
+### Terminal Version
+Once installed via pip, create a new Python file (e.g., `play.py`) and add the following:
 ```python
 from SnakeType import main
 main()
@@ -27,6 +56,13 @@ Then run it with:
 ```bash
 python play.py
 ```
+
+### Web Version
+Simply navigate to http://localhost:5001 after running the local server, or visit your deployed Vercel URL. The web interface provides:
+- Interactive typing tests with real-time feedback
+- Visual statistics and progress tracking
+- Achievement system with unlockable badges
+- Responsive design for desktop and mobile
 
 ## ✨ Core Features
 - **Real-time Character-by-Character Feedback** with instant visual indicators
@@ -85,4 +121,3 @@ Unlock achievements for various milestones:
 - **Streak Monitoring**: Track daily practice consistency
 - **Performance Visualization**: Text-based charts and progress indicators
 - **Comparative Analysis**: Week-over-week and month-over-month improvements
-

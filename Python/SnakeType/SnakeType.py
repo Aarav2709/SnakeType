@@ -14,7 +14,6 @@ from pathlib import Path
 try:
     import statistics
 except ImportError:
-    # Fallback for older Python versions
     class statistics:
         @staticmethod
         def mean(data):
@@ -55,14 +54,12 @@ except ImportError:
                 result.append(sorted_data[min(index, len(sorted_data) - 1)])
             return result
 
-# Word lists (you can expand these)
 EASY_WORDS = ["cat", "dog", "run", "big", "sun", "car", "red", "box", "top", "mix", "cup", "bug", "hat", "pen", "egg", "jam", "win", "fix", "ten", "zip"]
 MEDIUM_WORDS = ["python", "typing", "keyboard", "computer", "program", "function", "variable", "algorithm", "structure", "database", "network", "software", "hardware", "internet", "website", "application", "framework", "library", "module", "package"]
 HARD_WORDS = ["programming", "development", "architecture", "implementation", "optimization", "documentation", "configuration", "authentication", "authorization", "synchronization", "asynchronous", "multithreading", "encapsulation", "inheritance", "polymorphism", "abstraction", "methodology", "infrastructure", "scalability", "maintainability"]
 
 COMMON_WORDS = ["the", "of", "and", "to", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at", "be", "this", "have", "from", "or", "one", "had", "by", "word", "but", "not", "what", "all", "were", "we", "when", "your", "can", "said", "there", "each", "which", "she", "do", "how", "their", "if", "will", "up", "other", "about", "out", "many", "then", "them", "these", "so", "some", "her", "would", "make", "like", "into", "him", "has", "two", "more", "very", "after", "words", "first", "where", "been", "who", "its", "now", "find", "long", "down", "way", "may", "come", "could", "people", "my", "than", "water", "part", "time", "work", "right", "new", "take", "get", "place", "made", "live", "where", "after", "back", "little", "only", "round", "man", "year", "came", "show", "every", "good", "me", "give", "our", "under", "name", "very", "through", "just", "form", "sentence", "great", "think", "say", "help", "low", "line", "differ", "turn", "cause", "much", "mean", "before", "move", "right", "boy", "old", "too", "same", "tell", "does", "set", "three", "want", "air", "well", "also", "play", "small", "end", "put", "home", "read", "hand", "port", "large", "spell", "add", "even", "land", "here", "must", "big", "high", "such", "follow", "act", "why", "ask", "men", "change", "went", "light", "kind", "off", "need", "house", "picture", "try", "us", "again", "animal", "point", "mother", "world", "near", "build", "self", "earth", "father", "head", "stand", "own", "page", "should", "country", "found", "answer", "school", "grow", "study", "still", "learn", "plant", "cover", "food", "sun", "four", "between", "state", "keep", "eye", "never", "last", "let", "thought", "city", "tree", "cross", "farm", "hard", "start", "might", "story", "saw", "far", "sea", "draw", "left", "late", "run", "don't", "while", "press", "close", "night", "real", "life", "few", "north", "open", "seem", "together", "next", "white", "children", "begin", "got", "walk", "example", "ease", "paper", "group", "always", "music", "those", "both", "mark", "often", "letter", "until", "mile", "river", "car", "feet", "care", "second", "book", "carry", "took", "science", "eat", "room", "friend", "began", "idea", "fish", "mountain", "stop", "once", "base", "hear", "horse", "cut", "sure", "watch", "color", "face", "wood", "main", "enough", "plain", "girl", "usual", "young", "ready", "above", "ever", "red", "list", "though", "feel", "talk", "bird", "soon", "body", "dog", "family", "direct", "pose", "leave", "song", "measure", "door", "product", "black", "short", "numeral", "class", "wind", "question", "happen", "complete", "ship", "area", "half", "rock", "order", "fire", "south", "problem", "piece", "told", "knew", "pass", "since", "top", "whole", "king", "space", "heard", "best", "hour", "better", "during", "hundred", "five", "remember", "step", "early", "hold", "west", "ground", "interest", "reach", "fast", "verb", "sing", "listen", "six", "table", "travel", "less", "morning", "ten", "simple", "several", "vowel", "toward", "war", "lay", "against", "pattern", "slow", "center", "love", "person", "money", "serve", "appear", "road", "map", "rain", "rule", "govern", "pull", "cold", "notice", "voice", "unit", "power", "town", "fine", "certain", "fly", "fall", "lead", "cry", "dark", "machine", "note", "wait", "plan", "figure", "star", "box", "noun", "field", "rest", "correct", "able", "pound", "done", "beauty", "drive", "stood", "contain", "front", "teach", "week", "final", "gave", "green", "oh", "quick", "develop", "ocean", "warm", "free", "minute", "strong", "special", "mind", "behind", "clear", "tail", "produce", "fact", "street", "inch", "multiply", "nothing", "course", "stay", "wheel", "full", "force", "blue", "object", "decide", "surface", "deep", "moon", "island", "foot", "system", "busy", "test", "record", "boat", "common", "gold", "possible", "plane", "stead", "dry", "wonder", "laugh", "thousands", "ago", "ran", "check", "game", "shape", "equate", "hot", "miss", "brought", "heat", "snow", "tire", "bring", "yes", "distant", "fill", "east", "paint", "language", "among"]
 
-# Achievement System
 ACHIEVEMENTS = {
     "speed_demon": {"name": "Speed Demon", "desc": "Reach 80+ WPM", "icon": "🚀"},
     "accuracy_master": {"name": "Accuracy Master", "desc": "Maintain 98%+ accuracy", "icon": "🎯"},
@@ -100,7 +97,6 @@ class DatabaseManager:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 
-                # Test results table with better indexing
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS test_results (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -116,10 +112,8 @@ class DatabaseManager:
                     )
                 ''')
                 
-                # Create index for date queries
                 cursor.execute('CREATE INDEX IF NOT EXISTS idx_test_results_date ON test_results(date)')
                 
-                # Achievements table
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS achievements (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -129,7 +123,6 @@ class DatabaseManager:
                     )
                 ''')
                 
-                # Error patterns table with better constraints
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS error_patterns (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -142,10 +135,8 @@ class DatabaseManager:
                     )
                 ''')
                 
-                # Create index for error analysis
                 cursor.execute('CREATE INDEX IF NOT EXISTS idx_error_patterns_chars ON error_patterns(character_intended, character_typed)')
                 
-                # Daily streaks table
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS daily_streaks (
                         date DATE PRIMARY KEY,
@@ -156,7 +147,6 @@ class DatabaseManager:
                 conn.commit()
         except sqlite3.Error as e:
             print(f"Database initialization error: {e}")
-            # Create a backup and try to recover
             try:
                 import shutil
                 shutil.copy(self.db_path, f"{self.db_path}.backup")
@@ -168,7 +158,6 @@ class DatabaseManager:
     def save_test_result(self, result_data):
         """Save test result with improved error handling and validation"""
         try:
-            # Validate data before saving
             wpm, accuracy, mistakes, duration, difficulty, word_count, chars_typed, correct_chars = result_data
             
             if wpm < 0 or accuracy < 0 or accuracy > 100 or mistakes < 0 or duration <= 0:
@@ -183,7 +172,6 @@ class DatabaseManager:
                 ''', result_data)
                 test_id = cursor.lastrowid
                 
-                # Update daily streak
                 today = datetime.now().date()
                 cursor.execute('''
                     INSERT OR REPLACE INTO daily_streaks (date, tests_completed)
@@ -204,7 +192,6 @@ class DatabaseManager:
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
-                # Use executemany for better performance
                 cursor.executemany('''
                     INSERT INTO error_patterns 
                     (test_id, character_intended, character_typed, position, word_context)
@@ -302,29 +289,24 @@ class PerformanceTracker:
         """Add a keystroke sample for real-time WPM calculation with enhanced smoothing"""
         self.keystroke_times.append(timestamp)
         
-        # Keep only recent keystrokes (last 10 seconds)
         cutoff_time = timestamp - 10
         self.keystroke_times = [t for t in self.keystroke_times if t > cutoff_time]
         
-        # Calculate WPM based on recent activity with exponential smoothing
         if len(self.keystroke_times) >= 2:
             time_span = self.keystroke_times[-1] - self.keystroke_times[0]
             if time_span > 0:
                 chars_per_second = len(self.keystroke_times) / time_span
                 raw_wpm = (chars_per_second * 60) / 5  # 5 chars = 1 word
                 
-                # Apply exponential smoothing
                 if self.wpm_samples:
                     smoothed_wpm = (self.smoothing_factor * raw_wpm) + \
                                  ((1 - self.smoothing_factor) * self.wpm_samples[-1])
                 else:
                     smoothed_wpm = raw_wpm
                 
-                # Apply outlier filtering using IQR method
                 if self._is_valid_sample(smoothed_wpm):
                     self.wpm_samples.append(smoothed_wpm)
                     
-                    # Track velocity changes for rhythm analysis
                     if len(self.wpm_samples) >= 2:
                         velocity_change = self.wpm_samples[-1] - self.wpm_samples[-2]
                         self.velocity_history.append(velocity_change)
@@ -339,7 +321,6 @@ class PerformanceTracker:
         q3 = statistics.quantiles(recent_samples, n=4)[2]  # 75th percentile
         iqr = q3 - q1
         
-        # Define outlier bounds (1.5 * IQR rule)
         lower_bound = q1 - 1.5 * iqr
         upper_bound = q3 + 1.5 * iqr
         
@@ -350,12 +331,10 @@ class PerformanceTracker:
         if not self.wpm_samples:
             return 0
         
-        # Use weighted moving average of recent samples
         recent_samples = list(self.wpm_samples)[-10:]
         if len(recent_samples) < 3:
             return statistics.median(recent_samples)
         
-        # Apply different weights: more recent samples have higher weight
         weights = [i + 1 for i in range(len(recent_samples))]
         weighted_sum = sum(sample * weight for sample, weight in zip(recent_samples, weights))
         total_weight = sum(weights)
@@ -374,7 +353,6 @@ class PerformanceTracker:
         std_dev = statistics.stdev(self.wpm_samples)
         coefficient_of_variation = (std_dev / mean_wpm) * 100
         
-        # Convert to 0-100 scale (lower CV = higher consistency score)
         consistency_score = max(0, 100 - coefficient_of_variation)
         return min(100, consistency_score)
     
@@ -391,35 +369,27 @@ class PerformanceTracker:
             'velocity_analysis': self._analyze_velocity_patterns()
         }
         
-        # Enhanced character-by-character error analysis
         for i, (typed, target) in enumerate(zip(user_input, target_text)):
             if typed != target:
-                # Bigram context errors (existing)
                 if i > 0:
                     bigram = target_text[i-1:i+1]
                     patterns['bigram_errors'][bigram] += 1
                 
-                # Trigram context errors (enhanced)
                 if i > 0 and i < len(target_text) - 1:
                     trigram = target_text[i-1:i+2]
                     patterns['trigram_errors'][trigram] += 1
                 
-                # Position-based errors with more granular analysis
                 position_type = self._categorize_position(i, len(target_text))
                 patterns['position_errors'][position_type] += 1
                 
-                # Character substitution patterns
                 patterns['substitution_errors'][f"{target}->{typed}"] += 1
                 
-                # Finger mapping errors (enhanced)
                 finger = self._map_char_to_finger(target.lower())
                 if finger:
                     patterns['finger_errors'][finger] += 1
                 
-                # Store error for clustering analysis
                 self.error_clusters[i // 10].append(i)  # Group by 10-character windows
         
-        # Perform error clustering analysis
         patterns['error_clusters'] = self._analyze_error_clusters()
         
         return patterns
@@ -476,15 +446,12 @@ class PerformanceTracker:
         
         velocity_values = list(self.velocity_history)
         
-        # Calculate velocity statistics
         mean_velocity = statistics.mean(velocity_values)
         velocity_std = statistics.stdev(velocity_values)
         
-        # Detect acceleration/deceleration patterns
         positive_changes = sum(1 for v in velocity_values if v > 0)
         negative_changes = sum(1 for v in velocity_values if v < 0)
         
-        # Rhythm consistency analysis
         rhythm_score = 100 - min(100, (velocity_std / (abs(mean_velocity) + 1)) * 50)
         
         return {
@@ -515,7 +482,6 @@ class PerformanceTracker:
         consistency = self.calculate_consistency_score()
         velocity_analysis = self._analyze_velocity_patterns()
         
-        # Trend analysis
         recent_trend = self._calculate_performance_trend()
         
         insights = {
@@ -554,7 +520,6 @@ class PerformanceTracker:
         """Generate personalized recommendations based on performance data"""
         recommendations = []
         
-        # Speed-based recommendations
         if wpm < 30:
             recommendations.append("Focus on accuracy and proper finger placement before increasing speed")
         elif wpm < 50:
@@ -562,12 +527,10 @@ class PerformanceTracker:
         elif wpm < 70:
             recommendations.append("Work on maintaining consistent rhythm while increasing speed")
         
-        # Consistency-based recommendations
         if consistency < 60:
             recommendations.append("Practice at a slower, more controlled pace to improve consistency")
             recommendations.append("Focus on maintaining steady rhythm rather than burst typing")
         
-        # Rhythm-based recommendations
         rhythm_category = velocity_analysis.get('rhythm_category', 'unknown')
         if rhythm_category == 'inconsistent':
             recommendations.append("Practice with a metronome to develop consistent typing rhythm")
@@ -576,7 +539,6 @@ class PerformanceTracker:
         
         return recommendations
 
-# SoundManager class removed for simplified version
 
 class DifficultyAdjuster:
     def __init__(self):
@@ -594,7 +556,6 @@ class DifficultyAdjuster:
     
     def calculate_performance_score(self, wpm, accuracy):
         """Calculate a combined performance score"""
-        # Weight both speed and accuracy
         return (wpm * 0.6) + (accuracy * 0.4)
     
     def adjust_difficulty(self):
@@ -605,12 +566,10 @@ class DifficultyAdjuster:
         avg_score = sum(self.performance_history) / len(self.performance_history)
         recent_trend = sum(list(self.performance_history)[-3:]) / 3
         
-        # Increase difficulty if performing well consistently
         if recent_trend > 75 and self.current_level < 4:
             self.current_level += 1
             return "increased"
         
-        # Decrease difficulty if struggling
         elif recent_trend < 45 and self.current_level > 1:
             self.current_level -= 1
             return "decreased"
@@ -648,19 +607,16 @@ class Colors:
 
 class TypingGame:
     def __init__(self):
-        # Core game state
         self.current_text = ""
         self.user_input = ""
         self.start_time = None
         self.end_time = None
         self.is_running = False
         
-        # Enhanced tracking
         self.performance_tracker = PerformanceTracker()
         self.db_manager = DatabaseManager()
         self.difficulty_adjuster = DifficultyAdjuster()
         
-        # Statistics
         self.wpm_history = deque(maxlen=50)
         self.accuracy_history = deque(maxlen=50)
         self.current_wpm = 0
@@ -671,40 +627,33 @@ class TypingGame:
         self.mistakes = 0
         self.error_positions = []
         
-        # Gamification
         self.daily_goal = 5  # tests per day
         self.current_streak = 0
         self.achievements_unlocked = set()
         self.total_tests = 0
         self.total_time_typed = 0
         
-        # Settings
         self.auto_difficulty = True
         self.show_live_wpm = True
         self.text_wrap_width = 80
         
-        # Load user data
         self.load_user_data()
         
-        # Real-time WPM update thread
         self.wpm_update_thread = None
         self.stop_wpm_thread = False
     
     def load_user_data(self):
         """Load user statistics and achievements from database"""
         try:
-            # Load recent achievements
             achievements = self.db_manager.get_achievements()
             self.achievements_unlocked = {ach[0] for ach in achievements}
             
-            # Load recent statistics
             recent_stats = self.db_manager.get_statistics(days=30)
             if recent_stats:
                 self.total_tests = len(recent_stats)
                 self.wpm_history.extend([stat[2] for stat in recent_stats[-10:]])
                 self.accuracy_history.extend([stat[3] for stat in recent_stats[-10:]])
             
-            # Load streak
             self.current_streak = self.db_manager.get_streak_count()
             
         except Exception as e:
@@ -731,11 +680,9 @@ class TypingGame:
                 current_time = time.time()
                 elapsed_time = current_time - self.start_time
                 if elapsed_time > 0:
-                    # Calculate instantaneous WPM
                     chars_typed = len(self.user_input)
                     self.live_wpm = (chars_typed / 5) / (elapsed_time / 60)
                     
-                    # Add to performance tracker
                     self.performance_tracker.add_keystroke(current_time, chars_typed)
             
             time.sleep(0.1)  # Update 10 times per second
@@ -777,7 +724,6 @@ class TypingGame:
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
                 content = file.read().strip()
-                # Clean and prepare text (simple word extraction without regex)
                 words = []
                 current_word = ""
                 for char in content.lower():
@@ -787,7 +733,6 @@ class TypingGame:
                         if current_word:
                             words.append(current_word)
                             current_word = ""
-                # Add the last word if it exists
                 if current_word:
                     words.append(current_word)
                 return words[:100]  # Limit to 100 words
@@ -798,12 +743,10 @@ class TypingGame:
     def display_menu(self):
         self.clear_screen()
         
-        # Display header with streak and achievements
         print(f"{Colors.CYAN}{Colors.BOLD}╔════════════════════════════════════════════════════════════════╗")
         print(f"║                           SNAKETYPE                            ║")
         print(f"╚════════════════════════════════════════════════════════════════╝{Colors.END}")
         
-        # User stats bar
         tests_today = len([t for t in self.db_manager.get_statistics(days=1)])
         progress_bar = "█" * tests_today + "░" * max(0, self.daily_goal - tests_today)
         
@@ -828,7 +771,6 @@ class TypingGame:
         print(f"{Colors.WHITE}11. 🎮 Typing Lessons{Colors.END}")
         print(f"{Colors.WHITE}12. Quit{Colors.END}")
         
-        # Show recent achievement notifications
         self.show_recent_achievements()
         
         return input(f"\n{Colors.CYAN}Enter your choice (1-12): {Colors.END}")
@@ -847,7 +789,6 @@ class TypingGame:
     def display_text_with_progress(self):
         self.clear_screen()
         
-        # Simplified header with only WPM, accuracy, and time
         elapsed = (time.time() - self.start_time) if self.start_time else 0
         
         print(f"{Colors.CYAN}{Colors.BOLD}╔═══════════════════════════════════════════════════════════════════════════╗")
@@ -855,13 +796,10 @@ class TypingGame:
         print(f"╚═══════════════════════════════════════════════════════════════════════════╝{Colors.END}")
         print()
         
-        # Enhanced character-by-character display with better wrapping
         self.display_enhanced_text()
         
-        # Enhanced progress bar with animations
         self.display_animated_progress_bar()
         
-        # Show typing tips based on current performance
         self.show_contextual_tips()
     
     def display_enhanced_text(self):
@@ -871,37 +809,30 @@ class TypingGame:
         current_line = ""
         line_length = 0
         
-        # Process each character with enhanced visual feedback
         for i, char in enumerate(self.current_text):
             color_code = ""
             char_display = char
             
             if i < typed_length:
-                # Character has been typed
                 if self.user_input[i] == char:
-                    # Correct character - use different shades for recent vs old
                     if i >= typed_length - 5:  # Recent characters
                         color_code = f"{Colors.GREEN}{Colors.BOLD}"
                     else:
                         color_code = Colors.GREEN
                 else:
-                    # Incorrect character with shake effect simulation
                     color_code = f"{Colors.RED}{Colors.BOLD}{Colors.REVERSE}"
                     if char == ' ':
                         char_display = '⎵'  # Better space indicator
             elif i == typed_length:
-                # Current character to type (enhanced cursor)
                 color_code = f"{Colors.YELLOW}{Colors.BOLD}{Colors.UNDERLINE}{Colors.BLINK}"
                 if char == ' ':
                     char_display = '⎵'
             else:
-                # Not yet typed
                 if char == ' ':
                     char_display = '⎵'
                 else:
                     color_code = Colors.GRAY
             
-            # Handle line wrapping with color preservation
             if char == ' ' and line_length > self.text_wrap_width - 10:
                 display_lines.append(current_line)
                 current_line = ""
@@ -910,11 +841,9 @@ class TypingGame:
                 current_line += f"{color_code}{char_display}{Colors.END}"
                 line_length += 1
         
-        # Add remaining text
         if current_line:
             display_lines.append(current_line)
         
-        # Display with line numbers for long texts
         for i, line in enumerate(display_lines[:8]):  # Show max 8 lines
             line_num = f"{Colors.GRAY}{i+1:2d}│{Colors.END}" if len(display_lines) > 1 else "  "
             print(f"{line_num} {line}")
@@ -929,7 +858,6 @@ class TypingGame:
         bar_length = 60
         filled_length = int(bar_length * progress)
         
-        # Create animated progress bar with gradient effect
         filled_part = ""
         for i in range(filled_length):
             if i < filled_length * 0.7:
@@ -941,13 +869,11 @@ class TypingGame:
         
         empty_part = f"{Colors.GRAY}{'░' * (bar_length - filled_length)}{Colors.END}"
         
-        # Add milestone markers
         milestone_positions = [bar_length//4, bar_length//2, 3*bar_length//4]
         bar_display = filled_part + empty_part
         
         print(f"Progress: {bar_display} {progress*100:.1f}%")
         
-        # WPM trend indicator
         if len(self.wpm_history) >= 2:
             recent_avg = sum(list(self.wpm_history)[-3:]) / min(3, len(self.wpm_history))
             older_avg = sum(list(self.wpm_history)[-6:-3]) / min(3, len(self.wpm_history) - 3) if len(self.wpm_history) > 3 else recent_avg
@@ -972,7 +898,6 @@ class TypingGame:
         elif self.mistakes > len(self.user_input) * 0.1:
             tips.append(f"{Colors.BLUE}💡 Tip: Take a breath and reset your focus{Colors.END}")
         
-        # Show one random tip
         if tips:
             print(f"\n{random.choice(tips)}")
     
@@ -983,13 +908,10 @@ class TypingGame:
         elapsed_time = time.time() - self.start_time
         typed_length = len(self.user_input)
         
-        # Enhanced WPM calculation with burst detection
         if elapsed_time > 0:
             self.current_wpm = (typed_length / 5) / (elapsed_time / 60)
-            # Use performance tracker for live WPM
             self.live_wpm = self.performance_tracker.get_current_wpm()
         
-        # Enhanced accuracy calculation
         correct_chars = 0
         self.error_positions = []
         
@@ -1024,14 +946,12 @@ class TypingGame:
         self.error_positions = []
         self.is_running = True
         
-        # Reset performance tracker
         self.performance_tracker = PerformanceTracker()
         
         self.display_text_with_progress()
         print(f"\n{Colors.YELLOW}🚀 Start typing to begin the test...{Colors.END}")
         print(f"{Colors.GRAY}Press Ctrl+C to stop the test early | ESC for menu{Colors.END}")
         
-        # Start real-time WPM tracking
         self.start_real_time_wpm_thread()
         
         try:
@@ -1061,7 +981,6 @@ class TypingGame:
                 self.calculate_stats()
                 self.display_text_with_progress()
                 
-                # Check if test is complete
                 if len(self.user_input) >= len(self.current_text):
                     self.end_time = time.time()
                     break
@@ -1069,7 +988,6 @@ class TypingGame:
         except KeyboardInterrupt:
             pass
         
-        # Stop real-time tracking
         self.stop_wpm_thread = True
         if self.wpm_update_thread:
             self.wpm_update_thread.join(timeout=1)
@@ -1089,15 +1007,12 @@ class TypingGame:
             input(f"\n{Colors.CYAN}Press Enter to continue...{Colors.END}")
             return
         
-        # Calculate final statistics
         test_duration = (self.end_time or time.time()) - self.start_time
         words_typed = len(self.user_input.split())
         chars_typed = len(self.user_input)
         
-        # Get enhanced performance insights
         performance_insights = self.performance_tracker.get_performance_insights()
         
-        # Display core metrics
         print(f"\n{Colors.YELLOW}⏱️  Time: {Colors.END}{test_duration:.1f} seconds")
         print(f"{Colors.YELLOW}🏃 WPM: {Colors.END}{self.current_wpm:.1f}")
         print(f"{Colors.YELLOW}🎯 Accuracy: {Colors.END}{self.current_accuracy:.1f}%")
@@ -1105,11 +1020,9 @@ class TypingGame:
         print(f"{Colors.YELLOW}📝 Words Typed: {Colors.END}{words_typed}")
         print(f"{Colors.YELLOW}🔤 Characters: {Colors.END}{chars_typed}")
         
-        # Enhanced metrics from performance tracker
         consistency = self.performance_tracker.calculate_consistency_score()
         print(f"{Colors.YELLOW}📊 Consistency: {Colors.END}{consistency:.1f}%")
         
-        # Show rhythm analysis if available
         if performance_insights.get('status') != 'insufficient_data':
             rhythm_data = performance_insights.get('rhythm_analysis', {})
             if rhythm_data.get('status') != 'insufficient_data':
@@ -1117,16 +1030,12 @@ class TypingGame:
                 rhythm_score = rhythm_data.get('velocity_consistency', 0)
                 print(f"{Colors.YELLOW}🎵 Rhythm: {Colors.END}{rhythm_category.replace('_', ' ').title()} ({rhythm_score:.1f}%)")
         
-        # First pause point - allow user to read core metrics
         input(f"\n{Colors.CYAN}📊 Core metrics displayed. Press Enter to see performance analysis...{Colors.END}")
         
-        # Enhanced performance analysis
         self.display_enhanced_performance_analysis(performance_insights)
         
-        # Second pause point - allow user to read performance analysis
         input(f"\n{Colors.CYAN}📈 Performance analysis complete. Press Enter to continue...{Colors.END}")
         
-        # Save results to database
         result_data = (
             self.current_wpm, self.current_accuracy, self.mistakes,
             test_duration, "adaptive" if self.auto_difficulty else "manual",
@@ -1134,11 +1043,9 @@ class TypingGame:
         )
         test_id = self.db_manager.save_test_result(result_data)
         
-        # Enhanced error pattern analysis
         if self.error_positions:
             enhanced_patterns = self.performance_tracker.detect_typing_patterns(self.user_input, self.current_text)
             
-            # Save traditional error patterns
             error_data = []
             for error in self.error_positions:
                 error_data.append((
@@ -1147,37 +1054,29 @@ class TypingGame:
                 ))
             self.db_manager.save_error_pattern(test_id, error_data)
             
-            # Display enhanced error analysis
             self.display_enhanced_error_analysis(enhanced_patterns)
         
-        # Update statistics
         self.wpm_history.append(self.current_wpm)
         self.accuracy_history.append(self.current_accuracy)
         self.total_tests += 1
         self.total_time_typed += test_duration
         
-        # Update difficulty adjuster
         self.difficulty_adjuster.add_performance(self.current_wpm, self.current_accuracy)
         
-        # Check for achievements
         self.check_achievements(test_duration)
         
-        # Third pause point - allow user to read achievements (if any were unlocked)
         if hasattr(self, '_new_achievements_displayed') and self._new_achievements_displayed:
             input(f"\n{Colors.CYAN}🎉 Achievement notifications shown. Press Enter for recommendations...{Colors.END}")
             self._new_achievements_displayed = False
         
-        # Enhanced performance feedback with recommendations
         self.show_enhanced_performance_feedback(performance_insights)
         
-        # Final pause point - user can read recommendations before returning to menu
         input(f"\n{Colors.CYAN}💡 Recommendations displayed. Press Enter to return to main menu...{Colors.END}")
     
     def display_enhanced_performance_analysis(self, performance_insights):
         """Display enhanced performance analysis with rhythm and pattern insights"""
         print(f"\n{Colors.BLUE}{Colors.BOLD}📈 Enhanced Performance Analysis:{Colors.END}")
         
-        # Traditional speed and accuracy analysis
         if self.current_wpm >= 80:
             speed_rating = f"{Colors.GREEN}🚀 Excellent{Colors.END}"
         elif self.current_wpm >= 60:
@@ -1200,7 +1099,6 @@ class TypingGame:
         
         print(f"  Accuracy Rating: {accuracy_rating}")
         
-        # Enhanced rhythm and consistency analysis
         if performance_insights.get('status') != 'insufficient_data':
             current_perf = performance_insights.get('current_performance', {})
             trend = current_perf.get('performance_trend', 'stable')
@@ -1229,7 +1127,6 @@ class TypingGame:
         """Display enhanced error analysis with finger mapping and clustering"""
         print(f"\n{Colors.RED}🔍 Enhanced Error Analysis:{Colors.END}")
         
-        # Traditional error analysis
         if self.error_positions:
             common_errors = defaultdict(int)
             for error in self.error_positions:
@@ -1240,7 +1137,6 @@ class TypingGame:
             for error_type, count in sorted(common_errors.items(), key=lambda x: x[1], reverse=True)[:3]:
                 print(f"    {error_type}: {count} times")
         
-        # Enhanced finger analysis
         finger_errors = enhanced_patterns.get('finger_errors', {})
         if finger_errors:
             print(f"\n  Finger-Specific Errors:")
@@ -1249,7 +1145,6 @@ class TypingGame:
                 finger_name = finger.replace('_', ' ').title()
                 print(f"    {finger_name}: {count} errors")
         
-        # Error clustering analysis
         error_clusters = enhanced_patterns.get('error_clusters', [])
         if error_clusters:
             print(f"\n  Error Hotspots:")
@@ -1258,7 +1153,6 @@ class TypingGame:
                 density = cluster['error_density'] * 100
                 print(f"    Characters {start_pos}-{start_pos+10}: {density:.1f}% error rate")
         
-        # Trigram analysis for advanced users
         trigram_errors = enhanced_patterns.get('trigram_errors', {})
         if trigram_errors:
             print(f"\n  Problem Letter Combinations:")
@@ -1270,19 +1164,16 @@ class TypingGame:
         """Show enhanced personalized performance feedback with AI-generated recommendations"""
         print(f"\n{Colors.BLUE}{Colors.BOLD}💡 Enhanced Personalized Recommendations:{Colors.END}")
         
-        # Use AI-generated recommendations from performance tracker
         if performance_insights.get('status') != 'insufficient_data':
             recommendations = performance_insights.get('recommendations', [])
             if recommendations:
                 for i, rec in enumerate(recommendations, 1):
                     print(f"  {i}. {rec}")
             else:
-                # Fallback to traditional recommendations
                 self.show_traditional_recommendations()
         else:
             self.show_traditional_recommendations()
         
-        # Enhanced improvement trend analysis
         if len(self.wpm_history) >= 5:
             recent_avg = sum(list(self.wpm_history)[-3:]) / 3
             older_avg = sum(list(self.wmp_history)[-6:-3]) / 3 if len(self.wpm_history) >= 6 else recent_avg
@@ -1292,7 +1183,6 @@ class TypingGame:
             elif recent_avg < older_avg - 2:
                 print(f"{Colors.YELLOW}  📚 Consider taking a break and practicing fundamentals{Colors.END}")
             
-        # Show typing rhythm feedback
         if performance_insights.get('status') != 'insufficient_data':
             rhythm_data = performance_insights.get('rhythm_analysis', {})
             if rhythm_data.get('status') != 'insufficient_data':
@@ -1304,7 +1194,6 @@ class TypingGame:
     
     def show_traditional_recommendations(self):
         """Fallback traditional recommendations"""
-        # Speed recommendations
         if self.current_wpm < 40:
             print(f"  • Focus on maintaining a steady rhythm rather than speed")
             print(f"  • Practice finger positioning and muscle memory")
@@ -1312,12 +1201,10 @@ class TypingGame:
             print(f"  • Try typing without looking at the keyboard")
             print(f"  • Practice common word combinations")
         
-        # Accuracy recommendations
         if self.current_accuracy < 95:
             print(f"  • Slow down and focus on accuracy first")
             print(f"  • Practice problematic character combinations")
         
-        # Error pattern recommendations
         if self.error_positions:
             finger_errors = self.analyze_finger_errors()
             if finger_errors:
@@ -1327,7 +1214,6 @@ class TypingGame:
         """Display detailed performance analysis"""
         print(f"\n{Colors.BLUE}{Colors.BOLD}📈 Performance Analysis:{Colors.END}")
         
-        # Speed analysis
         if self.current_wpm >= 80:
             speed_rating = f"{Colors.GREEN}🚀 Excellent{Colors.END}"
         elif self.current_wpm >= 60:
@@ -1339,7 +1225,6 @@ class TypingGame:
         
         print(f"  Speed Rating: {speed_rating}")
         
-        # Accuracy analysis
         if self.current_accuracy >= 98:
             accuracy_rating = f"{Colors.GREEN}🎯 Perfect{Colors.END}"
         elif self.current_accuracy >= 95:
@@ -1351,7 +1236,6 @@ class TypingGame:
         
         print(f"  Accuracy Rating: {accuracy_rating}")
         
-        # Error analysis preview
         if self.error_positions:
             common_errors = defaultdict(int)
             for error in self.error_positions:
@@ -1366,7 +1250,6 @@ class TypingGame:
         """Check and unlock achievements"""
         new_achievements = []
         
-        # Speed achievements
         if self.current_wpm >= 100 and "speed_machine" not in self.achievements_unlocked:
             if self.db_manager.unlock_achievement("speed_machine"):
                 new_achievements.append("speed_machine")
@@ -1374,7 +1257,6 @@ class TypingGame:
             if self.db_manager.unlock_achievement("speed_demon"):
                 new_achievements.append("speed_demon")
         
-        # Accuracy achievements
         if self.current_accuracy == 100 and "perfectionist" not in self.achievements_unlocked:
             if self.db_manager.unlock_achievement("perfectionist"):
                 new_achievements.append("perfectionist")
@@ -1382,17 +1264,14 @@ class TypingGame:
             if self.db_manager.unlock_achievement("accuracy_master"):
                 new_achievements.append("accuracy_master")
         
-        # Duration achievements
         if test_duration >= 300 and "marathon" not in self.achievements_unlocked:  # 5 minutes
             if self.db_manager.unlock_achievement("marathon"):
                 new_achievements.append("marathon")
         
-        # Session achievements
         if self.total_tests >= 10 and "persistent" not in self.achievements_unlocked:
             if self.db_manager.unlock_achievement("persistent"):
                 new_achievements.append("persistent")
         
-        # Time-based achievements
         current_hour = datetime.now().hour
         if current_hour < 8 and "early_bird" not in self.achievements_unlocked:
             if self.db_manager.unlock_achievement("early_bird"):
@@ -1401,7 +1280,6 @@ class TypingGame:
             if self.db_manager.unlock_achievement("night_owl"):
                 new_achievements.append("night_owl")
         
-        # Display new achievements
         if new_achievements:
             print(f"\n{Colors.MAGENTA}{Colors.BOLD}🎉 NEW ACHIEVEMENTS UNLOCKED! 🎉{Colors.END}")
             for ach_id in new_achievements:
@@ -1416,7 +1294,6 @@ class TypingGame:
         """Show personalized performance feedback and recommendations"""
         print(f"\n{Colors.BLUE}{Colors.BOLD}💡 Personalized Recommendations:{Colors.END}")
         
-        # Speed recommendations
         if self.current_wpm < 40:
             print(f"  • Focus on maintaining a steady rhythm rather than speed")
             print(f"  • Practice finger positioning and muscle memory")
@@ -1424,18 +1301,15 @@ class TypingGame:
             print(f"  • Try typing without looking at the keyboard")
             print(f"  • Practice common word combinations")
         
-        # Accuracy recommendations
         if self.current_accuracy < 95:
             print(f"  • Slow down and focus on accuracy first")
             print(f"  • Practice problematic character combinations")
         
-        # Error pattern recommendations
         if self.error_positions:
             finger_errors = self.analyze_finger_errors()
             if finger_errors:
                 print(f"  • Focus on training these fingers: {', '.join(finger_errors)}")
         
-        # Improvement trend
         if len(self.wpm_history) >= 5:
             recent_avg = sum(list(self.wpm_history)[-3:]) / 3
             older_avg = sum(list(self.wpm_history)[-6:-3]) / 3 if len(self.wpm_history) >= 6 else recent_avg
@@ -1466,7 +1340,6 @@ class TypingGame:
                     finger_errors[finger] += 1
                     break
         
-        # Return fingers with most errors
         problem_fingers = sorted(finger_errors.items(), key=lambda x: x[1], reverse=True)[:2]
         return [finger.replace('_', ' ') for finger, count in problem_fingers if count > 1]
     
@@ -1496,7 +1369,6 @@ class TypingGame:
                 finally:
                     termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         except (UnicodeDecodeError, ImportError, OSError, AttributeError) as e:
-            # Comprehensive fallback for all edge cases
             try:
                 return input("Press Enter and type a character: ")[:1]
             except (EOFError, KeyboardInterrupt):
@@ -1509,7 +1381,6 @@ class TypingGame:
         print(f"║                    ADVANCED STATISTICS                       ║")
         print(f"╚═══════════════════════════════════════════════════════════════╝{Colors.END}")
         
-        # Get recent statistics
         stats_30d = self.db_manager.get_statistics(days=30)
         stats_7d = self.db_manager.get_statistics(days=7)
         
@@ -1518,7 +1389,6 @@ class TypingGame:
             input(f"\n{Colors.CYAN}Press Enter to continue...{Colors.END}")
             return
         
-        # Calculate comprehensive metrics
         wpm_scores = [stat[2] for stat in stats_30d]
         accuracy_scores = [stat[3] for stat in stats_30d]
         
@@ -1530,7 +1400,6 @@ class TypingGame:
         print(f"  Average Accuracy: {statistics.mean(accuracy_scores):.1f}%")
         print(f"  Best Accuracy: {max(accuracy_scores):.1f}%")
         
-        # Weekly comparison
         if stats_7d:
             week_wpm = [stat[2] for stat in stats_7d]
             week_acc = [stat[3] for stat in stats_7d]
@@ -1538,7 +1407,6 @@ class TypingGame:
             print(f"  Weekly WPM: {statistics.mean(week_wpm):.1f} (Δ{statistics.mean(week_wpm) - statistics.mean(wpm_scores):+.1f})")
             print(f"  Weekly Accuracy: {statistics.mean(week_acc):.1f}% (Δ{statistics.mean(week_acc) - statistics.mean(accuracy_scores):+.1f}%)")
         
-        # Error analysis
         print(f"\n{Colors.RED}🔍 Error Analysis:{Colors.END}")
         error_patterns = self.db_manager.get_error_analysis(days=30)
         if error_patterns:
@@ -1548,10 +1416,8 @@ class TypingGame:
         else:
             print("  No error data available")
         
-        # Performance trends
         self.show_performance_trends(stats_30d)
         
-        # Streak information
         streak = self.db_manager.get_streak_count()
         print(f"\n{Colors.MAGENTA}🔥 Streak Information:{Colors.END}")
         print(f"  Current streak: {streak} days")
@@ -1567,17 +1433,14 @@ class TypingGame:
             print("  Need more data for trend analysis")
             return
         
-        # Calculate trends for last 10 tests
         recent_stats = stats[:10]
         wpm_trend = [stat[2] for stat in recent_stats]
         acc_trend = [stat[3] for stat in recent_stats]
         
-        # Simple linear trend calculation
         x = list(range(len(wpm_trend)))
         wpm_slope = self.calculate_trend_slope(x, wpm_trend)
         acc_slope = self.calculate_trend_slope(x, acc_trend)
         
-        # Display trends
         wpm_direction = "📈 Improving" if wpm_slope > 0.5 else "📉 Declining" if wpm_slope < -0.5 else "➡️  Stable"
         acc_direction = "📈 Improving" if acc_slope > 0.1 else "📉 Declining" if acc_slope < -0.1 else "➡️  Stable"
         
@@ -1610,7 +1473,6 @@ class TypingGame:
         
         print(f"\n{Colors.YELLOW}🏆 Unlocked: {len(unlocked_ids)}/{len(ACHIEVEMENTS)}{Colors.END}")
         
-        # Group achievements by category
         categories = {
             "Speed": ["speed_demon", "speed_machine"],
             "Accuracy": ["accuracy_master", "perfectionist"],
@@ -1627,7 +1489,6 @@ class TypingGame:
                     status = f"{Colors.GREEN}✓" if ach_id in unlocked_ids else f"{Colors.GRAY}✗"
                     print(f"  {status} {ach['icon']} {ach['name']}: {ach['desc']}{Colors.END}")
         
-        # Show progress towards locked achievements
         print(f"\n{Colors.MAGENTA}📊 Progress towards next achievements:{Colors.END}")
         self.show_achievement_progress(unlocked_ids)
         
@@ -1641,12 +1502,10 @@ class TypingGame:
             print("  Complete some tests to see progress!")
             return
         
-        # Calculate current progress
         best_wpm = max(stat[2] for stat in stats) if stats else 0
         best_acc = max(stat[3] for stat in stats) if stats else 0
         test_count = len(stats)
         
-        # Speed achievements
         if "speed_demon" not in unlocked_ids:
             progress = min(100, (best_wpm / 80) * 100)
             print(f"  🚀 Speed Demon: {progress:.0f}% (Best: {best_wpm:.1f}/80 WPM)")
@@ -1655,12 +1514,10 @@ class TypingGame:
             progress = min(100, (best_wpm / 100) * 100)
             print(f"  ⚡ Speed Machine: {progress:.0f}% (Best: {best_wpm:.1f}/100 WPM)")
         
-        # Accuracy achievements
         if "accuracy_master" not in unlocked_ids:
             progress = min(100, (best_acc / 98) * 100)
             print(f"  🎯 Accuracy Master: {progress:.0f}% (Best: {best_acc:.1f}/98% accuracy)")
         
-        # Persistence achievements
         if "persistent" not in unlocked_ids:
             progress = min(100, (test_count / 10) * 100)
             print(f"  🔥 Persistent: {progress:.0f}% ({test_count}/10 tests)")
@@ -1827,7 +1684,6 @@ class TypingGame:
             print(f"{lesson['desc']}")
             input(f"\n{Colors.CYAN}Press Enter to begin...{Colors.END}")
             
-            # Create lesson word list with repetition for practice
             lesson_words = lesson['words'] * 3  # Repeat each word 3 times
             random.shuffle(lesson_words)
             self.run_test(lesson_words, test_mode="lesson")

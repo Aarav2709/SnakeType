@@ -1,0 +1,326 @@
+.lessons-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.lessons-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.lessons-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #fff, #ccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.lessons-header p {
+    font-size: 1.2rem;
+    color: #999;
+    margin-bottom: 0;
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.lesson-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    border-color: #555;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.lesson-card:hover::before {
+    opacity: 1;
+}
+
+.lesson-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.lesson-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.lesson-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.lesson-card p {
+    color: #ccc;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.lesson-difficulty {
+    margin-top: auto;
+}
+
+.difficulty {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.difficulty.beginner {
+    background: #1e7e34;
+    color: #fff;
+}
+
+.difficulty.intermediate {
+    background: #fd7e14;
+    color: #fff;
+}
+
+.difficulty.advanced {
+    background: #dc3545;
+    color: #fff;
+}
+
+.lesson-tips {
+    margin-top: 4rem;
+}
+
+.lesson-tips h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tip-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.tip-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.tip-card p {
+    color: #ccc;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid #333;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #333;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.close {
+    color: #999;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #fff;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body p {
+    color: #ccc;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.lesson-preview h4 {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+#lessonWords {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #ccc;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.6;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #333;
+}
+
+.btn-primary {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #333;
+    color: #fff;
+    border-color: #666;
+}
+
+@media (max-width: 768px) {
+    .lessons-container {
+        padding: 1rem;
+    }
+    
+    .lessons-header h1 {
+        font-size: 2rem;
+    }
+    
+    .lessons-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .lesson-card {
+        padding: 1.5rem;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 1rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lessons-container > * {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.lesson-card:nth-child(1) { animation-delay: 0.1s; }
+.lesson-card:nth-child(2) { animation-delay: 0.2s; }
+.lesson-card:nth-child(3) { animation-delay: 0.3s; }
+.lesson-card:nth-child(4) { animation-delay: 0.4s; }
+.lesson-card:nth-child(5) { animation-delay: 0.5s; }
+.lesson-card:nth-child(6) { animation-delay: 0.6s; }

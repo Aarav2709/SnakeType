@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}SnakeType{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 70vh; text-align: center;">
+    <h1 style="font-size: 4rem; margin-bottom: 2rem; font-weight: 300; color: #ffffff;">SnakeType</h1>
+    
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+        <a href="/test" style="padding: 1rem 2rem; background: #ffffff; color: #000000; text-decoration: none; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='#ffffff'">Start Typing Test</a>
+        <a href="/lessons" style="padding: 1rem 2rem; background: transparent; color: #ffffff; text-decoration: none; border: 2px solid #ffffff; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;" onmouseover="this.style.background='#ffffff'; this.style.color='#000000'" onmouseout="this.style.background='transparent'; this.style.color='#ffffff'">Practice Lessons</a>
+    </div>
+</div>
+{% endblock %}

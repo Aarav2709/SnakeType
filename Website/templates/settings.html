@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - SnakeType{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <div class="settings-header">
+        <h1>⚙️ Settings</h1>
+        <p>Customize your typing experience.</p>
+    </div>
+
+    <div class="settings-sections">
+        <div class="settings-section">
+            <h2>🎯 Typing Settings</h2>
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Auto Difficulty</span>
+                    <small>Automatically adjust difficulty based on performance</small>
+                </label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="auto-difficulty" {{ 'checked' if settings.auto_difficulty == 'true' else '' }}>
+                    <label for="auto-difficulty"></label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Daily Goal</span>
+                    <small>Number of tests to complete each day</small>
+                </label>
+                <div class="number-input">
+                    <input type="number" id="daily-goal" min="1" max="50" value="{{ settings.daily_goal }}">
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Sound Effects</span>
+                    <small>Play sounds for keystrokes and achievements</small>
+                </label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="sound-enabled" {{ 'checked' if settings.sound_enabled == 'true' else '' }}>
+                    <label for="sound-enabled"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>🎨 Display Settings</h2>
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Theme</span>
+                    <small>Choose your preferred color scheme</small>
+                </label>
+                <select id="theme-select">
+                    <option value="dark" {{ 'selected' if settings.theme == 'dark' else '' }}>Dark</option>
+                    <option value="light" {{ 'selected' if settings.theme == 'light' else '' }}>Light</option>
+                    <option value="blue" {{ 'selected' if settings.theme == 'blue' else '' }}>Blue</option>
+                    <option value="green" {{ 'selected' if settings.theme == 'green' else '' }}>Green</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Font Size</span>
+                    <small>Adjust text size for comfortable reading</small>
+                </label>
+                <select id="font-size">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                    <option value="xlarge">Extra Large</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Show Live WPM</span>
+                    <small>Display real-time WPM during typing</small>
+                </label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="show-live-wpm" checked>
+                    <label for="show-live-wpm"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>💾 Data Management</h2>
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Export Data</span>
+                    <small>Download your typing statistics as JSON</small>
+                </label>
+                <button class="btn-secondary" onclick="exportData()">
+                    📥 Export Data
+                </button>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Import Custom Text</span>
+                    <small>Upload a text file for custom typing tests</small>
+                </label>
+                <div class="file-upload">
+                    <input type="file" id="custom-text-file" accept=".txt,.md" style="display: none;">
+                    <button class="btn-secondary" onclick="document.getElementById('custom-text-file').click()">
+                        📄 Choose File
+                    </button>
+                    <span id="file-name"></span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Reset Statistics</span>
+                    <small>Clear all your typing test data (cannot be undone)</small>
+                </label>
+                <button class="btn-danger" onclick="confirmReset()">
+                    🗑️ Reset Data
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>⌨️ Keyboard Settings</h2>
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Keyboard Layout</span>
+                    <small>Select your keyboard layout</small>
+                </label>
+                <select id="keyboard-layout">
+                    <option value="qwerty" selected>QWERTY</option>
+                    <option value="dvorak">Dvorak</option>
+                    <option value="colemak">Colemak</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">
+                    <span>Show Keyboard</span>
+                    <small>Display virtual keyboard during tests</small>
+                </label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="show-keyboard">
+                    <label for="show-keyboard"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-footer">
+        <button class="btn-primary save-settings" onclick="saveSettings()">
+            💾 Save Settings
+        </button>
+        <div class="save-status" id="save-status"></div>
+    </div>
+</div>
+
+<div id="resetModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>⚠️ Confirm Reset</h2>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to reset all your typing statistics? This action cannot be undone.</p>
+            <p><strong>This will delete:</strong></p>
+            <ul>
+                <li>All test results</li>
+                <li>Achievement progress</li>
+                <li>Error analysis data</li>
+                <li>Performance trends</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeResetModal()">Cancel</button>
+            <button class="btn-danger" onclick="confirmResetData()">Reset All Data</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

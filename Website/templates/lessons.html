@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Typing Lessons - SnakeType{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lessons.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="lessons-container">
+    <div class="lessons-header">
+        <h1>Typing Lessons</h1>
+        <p>Structured practice to improve your typing skills.</p>
+    </div>
+
+    <div class="lessons-grid">
+        {% for lesson_id, lesson in lessons.items() %}
+        <div class="lesson-card" onclick="startLesson('{{ lesson_id }}')">
+            <div class="lesson-icon">
+                {% if lesson_id == 'home_row' %}
+                    🏠
+                {% elif lesson_id == 'top_row' %}
+                    ⬆️
+                {% elif lesson_id == 'bottom_row' %}
+                    ⬇️
+                {% elif lesson_id == 'numbers' %}
+                    🔢
+                {% elif lesson_id == 'special' %}
+                    🔣
+                {% elif lesson_id == 'speed' %}
+                    ⚡
+                {% endif %}
+            </div>
+            <h3>{{ lesson.name }}</h3>
+            <p>{{ lesson.desc }}</p>
+            <div class="lesson-difficulty">
+                {% if lesson_id in ['home_row', 'top_row', 'bottom_row'] %}
+                    <span class="difficulty beginner">Beginner</span>
+                {% elif lesson_id in ['numbers', 'special'] %}
+                    <span class="difficulty intermediate">Intermediate</span>
+                {% else %}
+                    <span class="difficulty advanced">Advanced</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="lesson-tips">
+        <h2>💡 Lesson Tips</h2>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>Proper Posture</h4>
+                <p>Sit up straight with feet flat on the floor and wrists straight.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Finger Placement</h4>
+                <p>Keep fingers curved and use the correct finger for each key.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Practice Regularly</h4>
+                <p>Short, frequent practice sessions are more effective than long ones.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Accuracy First</h4>
+                <p>Focus on accuracy before speed - speed will come naturally.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="lessonModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="lessonTitle"></h2>
+            <span class="close" onclick="closeLessonModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p id="lessonDescription"></p>
+            <div class="lesson-preview">
+                <h4>Practice Words:</h4>
+                <div id="lessonWords"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeLessonModal()">Cancel</button>
+            <button class="btn-primary" onclick="confirmStartLesson()">Start Lesson</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/lessons.js') }}"></script>
+{% endblock %}

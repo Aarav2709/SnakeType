@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics - SnakeType{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stats.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <div class="stats-header">
+        <h1>Your Statistics</h1>
+        <p>Track your typing progress and achievements.</p>
+    </div>
+
+    {% if best_stats and best_stats[4] > 0 %}
+    <div class="stats-overview">
+        <div class="stat-card">
+            <h3>{{ "%.0f"|format(best_stats[0] or 0) }}</h3>
+            <p>Best WPM</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ "%.0f"|format(best_stats[2] or 0) }}</h3>
+            <p>Average WPM</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ "%.0f"|format(best_stats[1] or 0) }}%</h3>
+            <p>Best Accuracy</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ "%.0f"|format(best_stats[3] or 0) }}%</h3>
+            <p>Average Accuracy</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ best_stats[4] or 0 }}</h3>
+            <p>Tests Completed</p>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <h2>Performance Over Time</h2>
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="recent-tests">
+        <h2>Recent Tests</h2>
+        {% if recent_stats %}
+        <table class="test-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>WPM</th>
+                    <th>Accuracy</th>
+                    <th>Duration</th>
+                    <th>Words</th>
+                    <th>Errors</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test in recent_stats %}
+                <tr>
+                    <td>{{ test[6][:16] if test[6] else 'N/A' }}</td>
+                    <td>{{ "%.0f"|format(test[0]) }}</td>
+                    <td>{{ "%.0f"|format(test[1]) }}%</td>
+                    <td>{{ test[2] }}s</td>
+                    <td>{{ test[3] }}</td>
+                    <td>{{ test[4] }}</td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ test[5] }}">
+                            {{ test[5].title() }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button class="export-btn" onclick="exportData()">Export Data</button>
+        {% else %}
+        <div class="no-data">No test data available yet</div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="no-data">
+        <h2>No Statistics Yet</h2>
+        <p>Take your first typing test to see your statistics here!</p>
+        <a href="/test" class="btn" style="margin-top: 1rem;">Start First Test</a>
+    </div>
+    {% endif %}
+
+    <div class="achievements-section">
+        <h2>Achievements</h2>
+        <div class="achievements-grid">
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🚀</div>
+                <div class="achievement-name">Speed Demon</div>
+                <div class="achievement-desc">Reach 80+ WPM.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-name">Accuracy Master</div>
+                <div class="achievement-desc">Maintain 98%+ accuracy.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🔥</div>
+                <div class="achievement-name">Persistent</div>
+                <div class="achievement-desc">Complete 10 tests.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🏃</div>
+                <div class="achievement-name">Marathon</div>
+                <div class="achievement-desc">Type for 5 minutes straight.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">💎</div>
+                <div class="achievement-name">Perfectionist</div>
+                <div class="achievement-desc">Complete a test with 100% accuracy.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">📈</div>
+                <div class="achievement-name">Consistent</div>
+                <div class="achievement-desc">5 tests in a row with >90% accuracy.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">⚡</div>
+                <div class="achievement-name">Speed Machine</div>
+                <div class="achievement-desc">Reach 100+ WPM.</div>
+            </div>
+            <div class="achievement-card locked">
+                <div class="achievement-icon">📊</div>
+                <div class="achievement-name">Improver</div>
+                <div class="achievement-desc">Improve WPM by 20+ points.</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script data-test-data='{{ recent_stats|tojson if recent_stats else "[]" }}'></script>
+<script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+{% endblock %}

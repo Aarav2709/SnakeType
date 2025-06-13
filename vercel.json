@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Website/app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "Website/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "Website/app.py"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": "production",
+    "VERCEL": "1"
+  }
+}
