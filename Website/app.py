@@ -40,7 +40,7 @@ def init_database(db_path):
     try:
         conn = sqlite3.connect(db_path, timeout=30.0)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS test_results (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,7 +58,7 @@ def init_database(db_path):
                 test_mode TEXT DEFAULT 'standard'
             )
         ''')
-        
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS achievements (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +67,7 @@ def init_database(db_path):
                 UNIQUE(achievement_id)
             )
         ''')
-        
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS error_patterns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,14 +81,14 @@ def init_database(db_path):
                 FOREIGN KEY (test_id) REFERENCES test_results (id) ON DELETE CASCADE
             )
         ''')
-        
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS daily_streaks (
                 date DATE PRIMARY KEY,
                 tests_completed INTEGER DEFAULT 0 CHECK(tests_completed >= 0)
             )
         ''')
-        
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS user_settings (
                 id INTEGER PRIMARY KEY,
@@ -97,7 +97,7 @@ def init_database(db_path):
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
-        
+
         conn.commit()
         conn.close()
     except sqlite3.Error as e:
@@ -143,7 +143,7 @@ TYPING_LESSONS = {
         "words": ["qwerty", "uiop", "quite", "wiper", "upper", "quote", "power", "tower", "proper", "puppet"]
     },
     "bottom_row": {
-        "name": "Bottom Row", 
+        "name": "Bottom Row",
         "desc": "Learn zxcv bnm, keys.",
         "words": ["zxcv", "bnm,", "zone", "cave", "move", "come", "move", "zoom", "name", "came"]
     },
@@ -183,7 +183,7 @@ class DatabaseManager:
     def __init__(self, db_path=None):
         self.db_path = db_path or get_db_path()
         self.init_database()
-    
+
     def get_connection(self):
         """Get database connection with timeout and safety checks"""
         try:
@@ -194,15 +194,15 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Database connection error: {e}")
             raise
-    
+
     def init_database(self):
         """Initialize database with improved error handling"""
         try:
             os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-            
+
             with self.get_connection() as conn:
                 cursor = conn.cursor()
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS test_results (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -220,9 +220,9 @@ class DatabaseManager:
                         test_mode TEXT DEFAULT 'standard'
                     )
                 ''')
-                
+
                 cursor.execute('CREATE INDEX IF NOT EXISTS idx_test_results_date ON test_results(date)')
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS achievements (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -231,7 +231,7 @@ class DatabaseManager:
                         UNIQUE(achievement_id)
                     )
                 ''')
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS error_patterns (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -245,16 +245,16 @@ class DatabaseManager:
                         FOREIGN KEY (test_id) REFERENCES test_results (id) ON DELETE CASCADE
                     )
                 ''')
-                
+
                 cursor.execute('CREATE INDEX IF NOT EXISTS idx_error_patterns_chars ON error_patterns(character_intended, character_typed)')
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS daily_streaks (
                         date DATE PRIMARY KEY,
                         tests_completed INTEGER DEFAULT 0 CHECK(tests_completed >= 0)
                     )
                 ''')
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS user_settings (
                         id INTEGER PRIMARY KEY,
@@ -263,7 +263,7 @@ class DatabaseManager:
                         last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
-                
+
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS performance_insights (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -274,67 +274,67 @@ class DatabaseManager:
                         FOREIGN KEY (test_id) REFERENCES test_results (id) ON DELETE CASCADE
                     )
                 ''')
-                
+
                 conn.commit()
         except sqlite3.Error as e:
             print(f"Database initialization error: {e}")
             raise
-    
+
     def save_test_result(self, wpm, accuracy, duration, words_typed, errors, difficulty, chars_typed=0, correct_chars=0, raw_wpm=0, consistency=0, test_mode='standard'):
         """Enhanced test result saving with additional metrics"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute('''
-                    INSERT INTO test_results 
-                    (wpm, accuracy, mistakes, test_duration, difficulty, word_count, characters_typed, 
+                    INSERT INTO test_results
+                    (wpm, accuracy, mistakes, test_duration, difficulty, word_count, characters_typed,
                      correct_characters, raw_wpm, consistency_score, test_mode)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ''', (wpm, accuracy, errors, duration, difficulty, words_typed, chars_typed, correct_chars, raw_wpm, consistency, test_mode))
-                
+
                 test_id = cursor.lastrowid
-                
+
                 today = datetime.now().date()
                 cursor.execute('''
                     INSERT OR REPLACE INTO daily_streaks (date, tests_completed)
                     VALUES (?, COALESCE((SELECT tests_completed FROM daily_streaks WHERE date = ?) + 1, 1))
                 ''', (today, today))
-                
+
                 conn.commit()
                 return test_id
         except sqlite3.Error as e:
             print(f"Error saving test result: {e}")
             return None
-    
+
     def save_error_patterns(self, test_id, error_patterns):
         """Save detailed error patterns for analysis"""
         if not test_id or not error_patterns:
             return
-            
+
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 for error in error_patterns:
                     if isinstance(error, dict):
                         cursor.execute('''
-                            INSERT INTO error_patterns 
+                            INSERT INTO error_patterns
                             (test_id, character_intended, character_typed, position, word_context, finger_mapped, bigram_context)
                             VALUES (?, ?, ?, ?, ?, ?, ?)
-                        ''', (test_id, error.get('intended', ''), error.get('typed', ''), 
-                              error.get('position', 0), error.get('context', ''), 
+                        ''', (test_id, error.get('intended', ''), error.get('typed', ''),
+                              error.get('position', 0), error.get('context', ''),
                               error.get('finger', ''), error.get('bigram', '')))
                     else:
                         if '->' in str(error):
                             intended, typed = str(error).split('->', 1)
                             cursor.execute('''
-                                INSERT INTO error_patterns 
+                                INSERT INTO error_patterns
                                 (test_id, character_intended, character_typed, position, word_context, finger_mapped, bigram_context)
                                 VALUES (?, ?, ?, ?, ?, ?, ?)
                             ''', (test_id, intended.strip(), typed.strip(), 0, '', '', ''))
                 conn.commit()
         except sqlite3.Error as e:
             print(f"Error saving error patterns: {e}")
-    
+
     def unlock_achievement(self, achievement_id):
         """Unlock achievement with better error handling"""
         try:
@@ -348,7 +348,7 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error unlocking achievement: {e}")
             return False
-    
+
     def get_achievements(self):
         """Get achievements with error handling"""
         try:
@@ -383,7 +383,7 @@ class DatabaseManager:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute('''
-                    SELECT 
+                    SELECT
                         MAX(wpm) as best_wpm,
                         MAX(accuracy) as best_accuracy,
                         AVG(wpm) as avg_wpm,
@@ -398,16 +398,16 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error getting best stats: {e}")
             return None
-    
+
     def get_statistics(self, days=30):
         """Get statistics with parameterized queries for security"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute('''
-                    SELECT id, date, wpm, accuracy, mistakes, test_duration, difficulty, 
+                    SELECT id, date, wpm, accuracy, mistakes, test_duration, difficulty,
                            word_count, characters_typed, correct_characters, consistency_score
-                    FROM test_results 
+                    FROM test_results
                     WHERE date >= datetime('now', '-' || ? || ' days')
                     ORDER BY date DESC
                 ''', (days,))
@@ -415,7 +415,7 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error getting statistics: {e}")
             return []
-    
+
     def get_error_analysis(self, days=30):
         """Get comprehensive error analysis"""
         try:
@@ -435,14 +435,14 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error getting error analysis: {e}")
             return []
-    
+
     def get_streak_count(self):
         """Get current streak count"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute('''
-                    SELECT COUNT(*) FROM daily_streaks 
+                    SELECT COUNT(*) FROM daily_streaks
                     WHERE date >= date('now', '-7 days') AND tests_completed > 0
                 ''')
                 result = cursor.fetchone()
@@ -450,7 +450,7 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error getting streak count: {e}")
             return 0
-    
+
     def get_user_setting(self, key, default=None):
         """Get user setting value"""
         try:
@@ -462,7 +462,7 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error getting user setting: {e}")
             return default
-    
+
     def set_user_setting(self, key, value):
         """Set user setting value"""
         try:
@@ -477,7 +477,7 @@ class DatabaseManager:
         except sqlite3.Error as e:
             print(f"Error setting user setting: {e}")
             return False
-    
+
     def get_performance_trends(self, days=30):
         """Get performance trends for analysis"""
         try:
@@ -486,7 +486,7 @@ class DatabaseManager:
                 cursor.execute('''
                     SELECT DATE(date) as test_date, AVG(wpm) as avg_wpm, AVG(accuracy) as avg_accuracy,
                            COUNT(*) as test_count, AVG(consistency_score) as avg_consistency
-                    FROM test_results 
+                    FROM test_results
                     WHERE date >= datetime('now', '-' || ? || ' days')
                     GROUP BY DATE(date)
                     ORDER BY test_date DESC
@@ -554,14 +554,20 @@ def serve_static(filename):
     import mimetypes
     static_dir = os.path.join(os.path.dirname(__file__), 'static')
     response = send_from_directory(static_dir, filename)
-    
+
     # Ensure proper MIME types
     if filename.endswith('.css'):
         response.headers['Content-Type'] = 'text/css'
     elif filename.endswith('.js'):
         response.headers['Content-Type'] = 'application/javascript'
-    
+
     return response
+
+# Favicon route
+@app.route('/favicon.ico')
+def favicon():
+    from flask import send_from_directory
+    return send_from_directory(os.path.dirname(__file__), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/')
 def index():
@@ -571,15 +577,15 @@ def index():
         recent_stats = database.get_recent_stats(5)
         achievements = database.get_achievements()
         streak = database.get_streak_count()
-        
-        return render_template('index.html', 
+
+        return render_template('index.html',
                              best_stats=best_stats,
                              recent_stats=recent_stats,
                              achievements=achievements,
                              streak=streak)
     except Exception as e:
         print(f"Error in index route: {e}")
-        return render_template('index.html', 
+        return render_template('index.html',
                              best_stats=None,
                              recent_stats=[],
                              achievements=[],
@@ -598,23 +604,23 @@ def achievements():
     database = get_db()
     user_achievements = database.get_achievements()
     unlocked_ids = {ach[0] for ach in user_achievements}
-    
+
     stats = database.get_statistics(days=30)
     progress = {}
-    
+
     if stats:
         best_wpm = max(stat[2] for stat in stats)
         best_acc = max(stat[3] for stat in stats)
         test_count = len(stats)
-        
+
         progress = {
             'speed_demon': min(100, (best_wpm / 80) * 100),
             'speed_machine': min(100, (best_wpm / 100) * 100),
             'accuracy_master': min(100, (best_acc / 98) * 100),
             'persistent': min(100, (test_count / 10) * 100)
         }
-    
-    return render_template('achievements.html', 
+
+    return render_template('achievements.html',
                          achievements=ACHIEVEMENTS,
                          unlocked=unlocked_ids,
                          progress=progress)
@@ -627,16 +633,16 @@ def stats():
         best_stats = database.get_best_stats()
         error_analysis = database.get_error_analysis(30)
         trends = database.get_performance_trends(30)
-        
-        return render_template('stats.html', 
-                             recent_stats=recent_stats, 
+
+        return render_template('stats.html',
+                             recent_stats=recent_stats,
                              best_stats=best_stats,
                              error_analysis=error_analysis,
                              trends=trends)
     except Exception as e:
         print(f"Error in stats route: {e}")
-        return render_template('stats.html', 
-                             recent_stats=[], 
+        return render_template('stats.html',
+                             recent_stats=[],
                              best_stats={},
                              error_analysis={},
                              trends={})
@@ -646,26 +652,26 @@ def get_words():
     difficulty = request.args.get('difficulty', 'medium')
     count = int(request.args.get('count', 200))  # Increased default count
     lesson_type = request.args.get('lesson_type', None)
-    
+
     if lesson_type and lesson_type in TYPING_LESSONS:
         lesson = TYPING_LESSONS[lesson_type]
         words = lesson['words'] * (count // len(lesson['words']) + 1)
         words = words[:count]
         return jsonify({'words': words, 'lesson_name': lesson['name']})
-    
+
     if difficulty == 'adaptive':
         recent_stats = db.get_recent_stats(5)
         if recent_stats:
             avg_wpm = sum(stat[0] for stat in recent_stats) / len(recent_stats)
             avg_acc = sum(stat[1] for stat in recent_stats) / len(recent_stats)
-            
+
             if avg_wpm > 60 and avg_acc > 95:
                 difficulty = 'hard'
             elif avg_wpm > 40 and avg_acc > 90:
                 difficulty = 'medium'
             else:
                 difficulty = 'easy'
-    
+
     if difficulty == 'easy':
         available_words = EASY_WORDS.copy()
     elif difficulty == 'hard':
@@ -674,7 +680,7 @@ def get_words():
         available_words = COMMON_WORDS.copy()
     else:  # medium
         available_words = MEDIUM_WORDS.copy()
-    
+
     if count > len(available_words):
         words = []
         while len(words) < count:
@@ -684,13 +690,13 @@ def get_words():
     else:
         words = random.sample(available_words, count)
         random.shuffle(words)  # Shuffle the final selection
-    
+
     return jsonify({'words': words})
 
 @app.route('/api/save_result', methods=['POST'])
 def save_result():
     data = request.json
-    
+
     wpm = data.get('wpm', 0)
     accuracy = data.get('accuracy', 0)
     duration = data.get('duration', 0)
@@ -703,59 +709,59 @@ def save_result():
     consistency = data.get('consistency_score', 0)
     test_mode = data.get('test_mode', 'standard')
     error_patterns = data.get('error_patterns', [])
-    
+
     database = get_db()
-    test_id = database.save_test_result(wpm, accuracy, duration, words_typed, errors, 
-                                difficulty, chars_typed, correct_chars, raw_wpm, 
+    test_id = database.save_test_result(wpm, accuracy, duration, words_typed, errors,
+                                difficulty, chars_typed, correct_chars, raw_wpm,
                                 consistency, test_mode)
-    
+
     if test_id and error_patterns:
         database.save_error_patterns(test_id, error_patterns)
-    
+
     achievements_unlocked = []
     stats = database.get_statistics(days=30)
-    
+
     if wpm >= 80 and database.unlock_achievement('speed_demon'):
         achievements_unlocked.append('speed_demon')
     if wpm >= 100 and database.unlock_achievement('speed_machine'):
         achievements_unlocked.append('speed_machine')
-    
+
     if accuracy >= 98 and database.unlock_achievement('accuracy_master'):
         achievements_unlocked.append('accuracy_master')
     if accuracy == 100 and database.unlock_achievement('perfectionist'):
         achievements_unlocked.append('perfectionist')
-    
+
     if duration >= 300 and database.unlock_achievement('marathon'):  # 5 minutes
         achievements_unlocked.append('marathon')
-    
+
     if len(stats) >= 10 and database.unlock_achievement('persistent'):
         achievements_unlocked.append('persistent')
-    
+
     from datetime import datetime
     current_hour = datetime.now().hour
     if current_hour < 8 and database.unlock_achievement('early_bird'):
         achievements_unlocked.append('early_bird')
     if current_hour >= 22 and database.unlock_achievement('night_owl'):
         achievements_unlocked.append('night_owl')
-    
+
     if datetime.now().weekday() >= 5 and database.unlock_achievement('weekend_warrior'):
         achievements_unlocked.append('weekend_warrior')
-    
+
     streak = database.get_streak_count()
     if streak >= 7 and database.unlock_achievement('streak_master'):
         achievements_unlocked.append('streak_master')
-    
+
     if len(stats) >= 5:
         recent_accuracy = [stat[3] for stat in stats[:5]]
         if all(acc > 90 for acc in recent_accuracy) and database.unlock_achievement('consistent'):
             achievements_unlocked.append('consistent')
-    
+
     if len(stats) >= 10:
         recent_wpm = [stat[2] for stat in stats[:5]]
         older_wpm = [stat[2] for stat in stats[5:10]]
         if sum(recent_wpm)/5 - sum(older_wpm)/5 >= 20 and database.unlock_achievement('improver'):
             achievements_unlocked.append('improver')
-    
+
     return jsonify({
         'success': True,
         'test_id': test_id,
@@ -769,7 +775,7 @@ def get_stats():
     best_stats = database.get_best_stats()
     error_analysis = database.get_error_analysis(30)
     trends = database.get_performance_trends(30)
-    
+
     return jsonify({
         'recent_stats': recent_stats,
         'best_stats': best_stats,
@@ -796,14 +802,14 @@ def export_data():
     stats = db.get_statistics(days=365)  # Get full year of data
     achievements = db.get_achievements()
     error_analysis = db.get_error_analysis(days=365)
-    
+
     export_data = {
         'stats': stats,
         'achievements': achievements,
         'error_analysis': error_analysis,
         'export_date': datetime.now().isoformat()
     }
-    
+
     return jsonify(export_data)
 
 @app.route('/api/upload_text', methods=['POST'])
@@ -811,11 +817,11 @@ def upload_text():
     """Handle custom text upload"""
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
-    
+
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
-    
+
     try:
         content = file.read().decode('utf-8')
         words = []
@@ -829,15 +835,15 @@ def upload_text():
                     current_word = ""
         if current_word:
             words.append(current_word)
-        
+
         words = words[:200]
-        
+
         return jsonify({
             'success': True,
             'words': words,
             'word_count': len(words)
         })
-    
+
     except Exception as e:
         return jsonify({'error': f'Failed to process file: {str(e)}'}), 400
 
@@ -848,16 +854,16 @@ def get_performance_insights():
     stats = database.get_statistics(days=30)
     if not stats:
         return jsonify({'insights': [], 'recommendations': []})
-    
+
     insights = []
     recommendations = []
-    
+
     wpm_scores = [stat[2] for stat in stats]
     accuracy_scores = [stat[3] for stat in stats]
-    
+
     avg_wpm = sum(wpm_scores) / len(wpm_scores)
     avg_accuracy = sum(accuracy_scores) / len(accuracy_scores)
-    
+
     if avg_wpm < 40:
         insights.append({
             'type': 'speed',
@@ -872,7 +878,7 @@ def get_performance_insights():
             'icon': '📈'
         })
         recommendations.append('Try typing without looking at keyboard')
-    
+
     if avg_accuracy < 95:
         insights.append({
             'type': 'accuracy',
@@ -880,18 +886,18 @@ def get_performance_insights():
             'icon': '🎯'
         })
         recommendations.append('Focus on accuracy over speed')
-    
+
     if len(stats) >= 10:
         recent_wpm = sum(wpm_scores[:5]) / 5
         older_wpm = sum(wpm_scores[5:10]) / 5
-        
+
         if recent_wpm > older_wpm + 2:
             insights.append({
                 'type': 'trend',
                 'message': 'Great improvement! Your speed is increasing',
                 'icon': '🚀'
             })
-    
+
     return jsonify({
         'insights': insights,
         'recommendations': recommendations
