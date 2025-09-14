@@ -1,4 +1,3 @@
-
 <h1 align="center">🐍 SnakeType</h1>
 
 <p align="center">
@@ -14,6 +13,9 @@
   <a href="https://github.com/Aarav2709/SnakeType/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Aarav2709/SnakeType" alt="License"></a>
 </p>
 
+<p align="center">
+  <img src="image.png" alt="SnakeType Banner" />
+</p>
 ---
 
 ## 🚀 Installation
