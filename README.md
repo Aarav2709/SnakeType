@@ -1,123 +1,142 @@
-# 🐍 SnakeType
-SnakeType is a comprehensive, feature-rich terminal-based typing speed test game that goes beyond basic typing practice. Built with Python, it offers an engaging and gamified approach to improving your typing skills with real-time feedback, adaptive difficulty, achievement systems, and detailed performance analytics.
 
-[![PyPI Downloads](https://static.pepy.tech/badge/SnakeType)](https://pepy.tech/projects/SnakeType)
-[![PyPI version](https://img.shields.io/pypi/v/SnakeType.svg)](https://pypi.org/project/SnakeType/)
-[![Downloads](https://img.shields.io/pypi/dm/SnakeType.svg)](https://pypi.org/project/SnakeType/)
-[![Python Version](https://img.shields.io/pypi/pyversions/SnakeType.svg)](https://pypi.org/project/SnakeType/)
-[![License](https://img.shields.io/github/license/Aarav2709/SnakeType)](https://github.com/Aarav2709/SnakeType/blob/main/LICENSE)
+<h1 align="center">🐍 SnakeType</h1>
+
+<p align="center">
+  SnakeType is a comprehensive, feature-rich terminal-based typing speed test game that goes beyond basic typing practice.  
+  Built with Python, it offers an engaging and gamified approach to improving your typing skills with real-time feedback, adaptive difficulty, achievements, and detailed performance analytics.
+</p>
+
+<p align="center">
+  <a href="https://pepy.tech/projects/SnakeType"><img src="https://static.pepy.tech/badge/SnakeType" alt="Downloads"></a>
+  <a href="https://pypi.org/project/SnakeType/"><img src="https://img.shields.io/pypi/v/SnakeType.svg" alt="PyPI Version"></a>
+  <a href="https://pypi.org/project/SnakeType/"><img src="https://img.shields.io/pypi/dm/SnakeType.svg" alt="Downloads"></a>
+  <a href="https://pypi.org/project/SnakeType/"><img src="https://img.shields.io/pypi/pyversions/SnakeType.svg" alt="Python Versions"></a>
+  <a href="https://github.com/Aarav2709/SnakeType/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Aarav2709/SnakeType" alt="License"></a>
+</p>
 
 ---
 
 ## 🚀 Installation
 
 ### 📦 Terminal Version (PyPI Package)
-To install the terminal-based game, just use pip:
 ```bash
 pip install SnakeType
 ```
 
 ### 🌐 Web Application
-To run the web version locally or deploy it:
-
-1. **Clone the repository:**
 ```bash
+# Clone repository
 git clone https://github.com/Aarav2709/SnakeType.git
 cd SnakeType
-```
 
-2. **Install dependencies:**
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-3. **Run locally:**
-```bash
+# Run locally
 cd Website
 python app.py
 ```
-Then open http://localhost:5001 in your browser.
+➡️ Open [http://localhost:5001](http://localhost:5001) in your browser  
 
-4. **Deploy to Vercel (Optional):**
-   - Connect your GitHub repository to Vercel
-   - Vercel will automatically deploy using the included `vercel.json` configuration
+**Optional: Deploy to Vercel**
+- Connect GitHub repo → Vercel  
+- Deployment handled automatically with `vercel.json`  
 
 ---
 
 ## ▶️ How to Play
 
-### Terminal Version
-Once installed via pip, create a new Python file (e.g., `play.py`) and add the following:
+### 🎮 Terminal Version
+Create a file `play.py`:
 ```python
 from SnakeType import main
 main()
 ```
-Then run it with:
+Run:
 ```bash
 python play.py
 ```
 
-### Web Version
-Simply navigate to http://localhost:5001 after running the local server, or visit your deployed Vercel URL. The web interface provides:
-- Interactive typing tests with real-time feedback
-- Visual statistics and progress tracking
-- Achievement system with unlockable badges
-- Responsive design for desktop and mobile
+### 🌐 Web Version
+Visit `http://localhost:5001` or your deployed Vercel URL.  
+Includes:  
+- Real-time typing feedback  
+- Visual statistics dashboard  
+- Achievements with badges  
+- Mobile + desktop responsive  
+
+---
 
 ## ✨ Core Features
-- **Real-time Character-by-Character Feedback** with instant visual indicators
-- **Adaptive Difficulty System** that adjusts to your skill level automatically
-- **Multiple Test Modes**: Easy, Medium, Hard, Common Words, and Custom Text
-- **Advanced Performance Tracking** with SQLite database storage
-- **Achievement System** with 12+ unlockable achievements
-- **Live Statistics**: Real-time WPM, accuracy, consistency scoring
-- **Error Pattern Analysis** to identify and improve weak areas
-- **Typing Lessons** for skill development (Home Row, Number Row, etc.)
-- **Daily Streaks & Goals** for motivation and habit building
-- **Export/Import Statistics** for data portability
+- ⚡ **Real-time feedback** on every character  
+- 🎯 **Adaptive difficulty** adjusts to skill level  
+- 📝 **Multiple test modes**: Easy, Medium, Hard, Common Words, Custom Text  
+- 📊 **SQLite database tracking** for stats  
+- 🏆 **Achievement system** (12+ unlockables)  
+- 📈 **Live WPM, accuracy, consistency** monitoring  
+- 🔍 **Error pattern analysis**  
+- 🎓 **Typing lessons** (home row, number row, etc.)  
+- 🔄 **Daily streaks & goals**  
+- 📤 **Export/Import statistics**  
 
-### 🎮 Game Modes
-1. **Difficulty Levels**: Easy (3-5 letter words), Medium (6-8 letters), Hard (10+ letters)
-2. **Common Words Mode**: Practice with the most frequently used English words
-3. **Adaptive Mode**: AI-powered difficulty adjustment based on performance
-4. **Custom Text Import**: Load your own text files for practice
-5. **Typing Lessons**: Structured lessons for finger training and skill building
-6. **Custom Length Tests**: Choose anywhere from 10-200 words
+---
 
-### 📊 Advanced Analytics
-- **Performance Trends**: Track improvement over time with regression analysis
-- **Error Analysis**: Detailed breakdown of common mistakes and patterns
-- **Consistency Scoring**: Measure typing rhythm and stability
-- **Finger-specific Error Tracking**: Identify which fingers need more practice
-- **30-day Performance Reports**: Comprehensive statistics and insights
-- **Keystroke Timing Analysis**: Real-time rhythm detection
+## 🎮 Game Modes
+1. Easy, Medium, Hard (by word length)  
+2. Common Words Mode  
+3. Adaptive Mode (AI-powered)  
+4. Custom Text Import  
+5. Typing Lessons (structured training)  
+6. Custom Length Tests (10–200 words)  
 
-### 🏆 Achievement System
-Unlock achievements for various milestones:
-- **Speed Achievements**: Speed Demon (80+ WPM), Speed Machine (100+ WPM)
-- **Accuracy Rewards**: Accuracy Master (98%+), Perfectionist (100%)
-- **Persistence Badges**: Marathon typing, Daily streaks, Test completion milestones
-- **Time-based Rewards**: Early Bird, Night Owl, Weekend Warrior
-- **Progress Tracking**: Improvement-based achievements
+---
 
-### ⚙️ Customization Options
-- **Auto-difficulty Toggle**: Enable/disable adaptive difficulty
-- **Text Wrap Width**: Adjust display formatting (40-120 characters)
-- **Daily Goals**: Set personal targets (1-20 tests per day)
-- **Live WPM Display**: Toggle real-time speed updates
-- **Statistics Export**: Backup your progress data
+## 📊 Advanced Analytics
+- 📈 Performance trends with regression analysis  
+- 🧐 Error analysis (common mistakes, weak areas)  
+- 🎵 Consistency scoring (typing rhythm)  
+- 🖐️ Finger-specific error tracking  
+- 🗓️ 30-day performance reports  
+- ⌨️ Keystroke timing analysis  
 
-### 🎯 Key Technical Features
-- **SQLite Database**: Persistent storage for all statistics and progress
-- **Multi-threaded Performance**: Real-time updates without lag
-- **Cross-platform Compatibility**: Works on Windows, macOS, and Linux
-- **Enhanced Color Display**: Rich terminal UI with ANSI color support
-- **Error Pattern Recognition**: Machine learning-inspired error analysis
-- **Performance Optimization**: Efficient handling of large datasets
+---
 
-### 📈 Progress Tracking
-- **Real-time Metrics**: Live WPM, accuracy percentage, mistake counting
-- **Historical Data**: Store and analyze last 10 test results with trends
-- **Streak Monitoring**: Track daily practice consistency
-- **Performance Visualization**: Text-based charts and progress indicators
-- **Comparative Analysis**: Week-over-week and month-over-month improvements
+## 🏆 Achievement System
+Unlock rewards for:  
+- **Speed**: Speed Demon (80+ WPM), Speed Machine (100+ WPM)  
+- **Accuracy**: Accuracy Master (98%+), Perfectionist (100%)  
+- **Persistence**: Marathon typer, Daily streaks, Test completions  
+- **Time-based**: Early Bird, Night Owl, Weekend Warrior  
+- **Improvement milestones**  
+
+---
+
+## ⚙️ Customization Options
+- 🔀 Auto-difficulty toggle  
+- 📐 Text wrap width (40–120 chars)  
+- 🎯 Daily goals (1–20 tests/day)  
+- ⚡ Live WPM display toggle  
+- 📤 Statistics export for backup  
+
+---
+
+## 🎯 Key Technical Features
+- 💾 SQLite storage for stats & progress  
+- 🧵 Multi-threaded → lag-free updates  
+- 💻 Cross-platform (Windows, macOS, Linux)  
+- 🎨 Rich ANSI terminal colors  
+- 🤖 Error pattern recognition (ML-inspired)  
+- 🚀 Optimized for large datasets  
+
+---
+
+## 📈 Progress Tracking
+- ⏱️ Real-time metrics (WPM, accuracy, mistakes)  
+- 📂 Historical data (last 10 tests, trends)  
+- 🔥 Daily streaks consistency tracker  
+- 📊 Text-based charts for visualization  
+- 📆 Week & month comparative stats  
+
+---
+
+<p align="center"><b>🚀 Level up your typing with SnakeType – Practice, Progress, and Dominate!</b></p>
